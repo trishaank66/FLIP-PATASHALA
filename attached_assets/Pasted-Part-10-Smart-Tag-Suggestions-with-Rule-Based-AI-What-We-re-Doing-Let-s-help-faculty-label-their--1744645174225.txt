@@ -1,0 +1,49 @@
+Part 10: Smart Tag Suggestions with Rule-Based AI
+What We’re Doing
+Let’s help faculty label their files with tags, like sticking notes on a book! We’ll use simple if-then rules to suggest tags (e.g., “Video1.mp4” → “Video”), adding them during uploads from Part 4, with a sparkle animation to feel clever.
+What We Need 
+•	Add a tag input field to the upload form, with AI-suggested tags (e.g., “Python” if “python” in filename). 
+•	An /upload-content endpoint update with rule-based AI (if-then logic: MP4 → “Video”, filename-based tags). 
+•	Store tags in the “content” table (add tags column). 
+•	A “tada” animation for suggested tags and a tag icon.
+Who Can Do What 
+•	Students: 
+o	Can: Watch/download files with hints. 
+o	Can’t: Add tags or manage files. 
+o	Understands: “Tags make your files easy to find!”
+•	Faculty: 
+o	Can: Upload files with AI-suggested tags, edit/delete files, see analytics. 
+o	Can’t: Tag others’ files or manage users. 
+o	Understands: “Smart tags like ‘Python’ help students!”
+•	Admins: 
+o	Can: Log in (controls later). 
+o	Can’t: Tag content yet. 
+o	Understands: “Tags will organize everything!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the upload form, TailwindCSS for styling, Animate.css for “tada” effect, FontAwesome for a tag icon (fa-tag). 
+•	Backend: FastAPI for /upload-content, Python rule-based AI for tag logic. 
+•	Database: SQLite for “content” table (add tags). 
+•	Storage: SQLite BLOB/filesystem for files. 
+•	AI Tools: Python if-then logic for real suggestions—no ML, no fakes! 
+•	Tech Stack Rule: Use only these tools. Any changes need my approval first.
+Strict Mandate for Replit AI
+Dear Replit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Design the tag input with suggestion display. 
+2.	Update /upload-content with if-then tag logic (e.g., “python” → “Python”). 
+3.	Modify “content” table for tags. 
+4.	Choose “tada” animation and tag icon for UX. 
+5.	Ensure high-end CSS, alignment, colors, icons, and spacing—delightful for all users, even kids.
+UX Mandate
+All pages must have proper styling, alignment, structure, high-end animations (used sparingly), good colors, and FontAwesome icons. The UX should delight users, and even a child should understand it.
+Why It’s Cool
+The sparkly tags make organizing files feel smart, helping students find stuff easily!
+1.	let us start part <10> . of CONTENT MANAGEMENT MODULE first prepare a plan which is single unified plan without subplans so your  plan should contain all those functionalities and all tools Technologies mentioned for that part. 
+2.	first provide a plan as mentioned and ask for approval before starting the implementation of that part
+3.	 implementation plan should contain REAL front end, back end , database, AI  tools simultaneously. 
+4.	If u change any technology tool api framework etc in the plan mention the reason for change clearly and tool  and  must take my approval before implementation 
+5.	avoid redoing of work always check what has be done so far 
+6.	avoid mentioning of any timelines or durations in the plan.
+7.	Use a table to show which tool has been used and any replacement mention  it with reason
+8.	avoid redoing of work always check what has be done so far
+

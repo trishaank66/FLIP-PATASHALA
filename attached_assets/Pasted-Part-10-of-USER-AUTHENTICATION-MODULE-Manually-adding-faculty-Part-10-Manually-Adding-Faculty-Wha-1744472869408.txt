@@ -1,0 +1,38 @@
+Part 10 of USER AUTHENTICATION MODULE Manually adding faculty
+Part 10: Manually Adding Faculty
+What We’re Doing
+Let’s let admins add faculty one by one, like inviting a guest star to my dissertation. We’ll add a form to the dashboard from Part 9, building on admin controls, with a button that pulses for excitement.
+What We Need 
+•	A /manual-add-faculty endpoint to save faculty with email, password, faculty ID, and department. 
+•	A dashboard form with fields and an “Add Faculty” button. 
+•	Save faculty with role=“faculty”, dept_id, and verification_pending=true (awaits approval). 
+•	A “pulse” animation for the button and a user-plus icon.
+Who Can Do What 
+•	Students: 
+o	Can: Log in, see their group. 
+o	Can’t: Add faculty or see the dashboard. 
+o	Understands: “More teachers for you!”
+•	Faculty: 
+o	Can: Log in if verified, see their group. 
+o	Can’t: Add others or use admin tools. 
+o	Understands: “New colleagues joining soon!”
+•	Admins: 
+o	Can: Log in, sync/add/delete students, add faculty via form, verify faculty. 
+o	Can’t: Delete faculty yet—that’s next! 
+o	Understands: “Add teachers to grow your team!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the form, TailwindCSS for style, Animate.css for “pulse” effect, FontAwesome for a user-plus icon (fa-user-plus). 
+•	Backend: FastAPI for /manual-add-faculty, SQLite for updates. 
+•	Database: SQLite to store faculty in “users”. 
+•	AI Tools: None—just adding faculty.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Design the faculty add form layout. 
+2.	Plan the /manual-add-faculty endpoint with verification flag. 
+3.	Update “users” table for new faculty. 
+4.	Choose “pulse” animation and user-plus icon for UX.
+Why It’s Cool
+The pulsing button makes adding faculty personal, strengthening the team!
+
+let us start part <10> . of the user authentication module .first prepare a plan  which single unified plan without subplans which contains all real tools api's frameworks as mentioned in that “part”information. so you are plan should contain all those functionalities and all tools Technologies mention for that part. first provide a plan as mentioned and ask for approval before starting the implementation of that part.scrictly confine to given technologies,tool,apis given in the prompt above

@@ -1,0 +1,25 @@
+Implementation Prompt for Replit AI: Interactive Learning Module for Flipped Patashala
+Hey Replit AI, Let’s Create a Lively Classroom for Flipped Patashala!
+Hi Replit AI! We’re building the Interactive Learning (IL) Module for my M.Tech dissertation at BITS Pilani, turning Flipped Patashala into a fun hub where students quiz, chat, vote, and team up, faculty lead with ease, and admins keep things smooth. The Home Page, User Authentication (UA), and Content Management (CM) modules are ready—UA handles smart logins (students, faculty, admins), and CM stores videos/notes with tags like “Loops.” The other modules (Performance Analytics, Two-Way Feedback, Gamification) are designed but not built, so we’ll add stubs for them. IL brings learning to life with quizzes that fit your level, buzzing chats, quick polls, shared notes, and helpful tips, all organized by classes like “CSE - Dr. Rao.” We’re boosting engagement (from 6.5 to 10 interactions), cutting feedback delays to instant, and making learning clearer, aiming for 20% more awareness, 30% more fun, 40% faster responses, and 85% accurate tips. This is a planning phase—no coding, just a clear, kid-friendly map split into 20 parts, each adding a piece of IL magic. We’ll focus on IL first, connecting to UA/CM/Home Page only after, and stick to our tools to make it shine. Ready to spark some classroom joy?
+Core Tools for Every Part 
+•	Frontend: React.js (Next.js) for intuitive pages, TailwindCSS for bright colors (#1877F2, #FFFFFF, #000000), Animate.css for professional animations, FontAwesome for clear icons, Chart.js for visuals (e.g., poll pies). 
+•	Backend: Python with FastAPI for quick responses (e.g., “quiz done!”). 
+•	Database: SQLite for IL data (quizzes, posts, votes, notes). 
+•	Storage: SQLite BLOB or filesystem for notes/sketches (free, max 50MB). 
+•	AI Tools: 
+o	scikit-learn for quiz difficulty predictions. 
+o	spaCy for tagging posts/notes. 
+o	NLTK for mood analysis (optional). 
+o	TensorFlow Lite for note tagging. 
+o	Julius AI for engagement trends. 
+o	Claude API (mocked for tips—ask me for a real key if needed).
+Big Rules for Every Part 
+•	This is a plan—don’t build yet! 
+•	Focus on IL first—make each part about quizzes, chats, or notes, like running a lively class. 
+•	Only mention UA, CM, or Home Page after the IL feature, to show how they connect, not to change them. 
+•	Stick to the listed tech stack—any changes need my approval first. 
+•	Use professional animations only where they add joy—clean, not overdone. 
+•	Make every page pop with high-end CSS, perfect alignment, great colors, icons, and spacing—users should be delighted, and even a child can use it and understand! 
+•	Don’t redo UA stuff (e.g., logins, user syncing) or CM stuff (e.g., file tagging)—use what’s there for IL’s learning goals. 
+•	No OTP, MFA, or SMS—keep it simple with UA’s login system. 
+•	All analytics and insights must be layman-friendly (e.g., “You’re great at Loops!”) and add real value for each role, avoiding tech jargon.

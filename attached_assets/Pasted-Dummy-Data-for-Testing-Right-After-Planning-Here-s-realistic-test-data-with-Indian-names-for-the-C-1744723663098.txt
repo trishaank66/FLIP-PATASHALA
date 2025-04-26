@@ -1,0 +1,93 @@
+Dummy Data for Testing
+Right After Planning
+Here’s realistic test data with Indian names for the CM Module, aligned with the original prompt and Flipped Patashala:
+Users Table (from UA, 150 students, 10 faculty, 2 admins):  
+Students:  
+ID: S001, Email: priya.sharma@flippedpatashala.com, Role: student, Dept_ID: 1 (CSE), Subjects_Faculty: ["CSE - Faculty A"], Status: active  
+
+ID: S002, Email: arjun.mehta@flippedpatashala.com, Role: student, Dept_ID: 2 (IT), Subjects_Faculty: ["IT - Faculty B"], Status: active  
+
+... (148 more, like Neha, Rahul, Anjali)
+Faculty:  
+ID: F001, Email: prof.rao@flippedpatashala.com, Role: faculty, Dept_ID: 1 (CSE), Subjects_Faculty: ["CSE - Faculty A"], Status: active  
+
+ID: F002, Email: dr.meena@flippedpatashala.com, Role: faculty, Dept_ID: 2 (IT), Subjects_Faculty: ["IT - Faculty B"], Status: active  
+
+... (8 more, like Prof. Gupta, Dr. Singh)
+Admins:  
+ID: A001, Email: admin.kumar@flippedpatashala.com, Role: admin, Dept_ID: null, Status: active  
+
+ID: A002, Email: admin.lal@flippedpatashala.com, Role: admin, Dept_ID: null, Status: active
+Departments Table (from UA):  
+ID: 1, Name: CSE  
+
+ID: 2, Name: IT  
+
+ID: 3, Name: ECE  
+
+ID: 4, Name: MECH  
+
+ID: 5, Name: CIVIL
+Content Table (10 files):  
+ID: Content001, Subject_Faculty: “CSE - Faculty A”, Type: video, Filename: “Video1.mp4”, URL: “/files/video1.mp4”, Uploaded_By: F001, Dept_ID: 1, Tags: [“Python”, “Video”], Views: 10, Downloads: 5, Likes_Percent: 65, Interactions: {“S001”: “5 mins”}, Preview_URL: “/previews/video1.jpg”  
+
+ID: Content002, Subject_Faculty: “ECE - Faculty B”, Type: pdf, Filename: “Notes.pdf”, URL: “/files/notes.pdf”, Uploaded_By: F002, Dept_ID: 3, Tags: [“Circuits”, “PDF”], Views: 8, Downloads: 3, Likes_Percent: 50, Interactions: {“S003”: “downloaded”}, Preview_URL: “/previews/notes_page1.pdf”  
+
+... (8 more files, like PPTs, textbooks)
+CSV File (students.csv):  
+ID,Email,Role,Department
+S001,priya.sharma@flippedpatashala.com,student,CSE
+S002,arjun.mehta@flippedpatashala.com,student,IT
+S003,neha.verma@flippedpatashala.com,student,ECE
+... (147 more rows for 150 students)
+Audit Log Table (from UA, sample):  
+ID: 1, Action: “Admin synced 150 students”, User_ID: A001  
+
+ID: 2, Action: “Admin linked Content001 to CSE - Faculty A”, User_ID: A001
+How to Use It: Test student viewing/downloads, faculty uploads/edits/deletions, admin syncing/assignments, and analytics (e.g., “65% liked Video1.mp4”).
+Verification of Features
+All features from the original prompt are included, with UA overlaps handled as enhancements:  
+Content Types: Videos (MP4), PDFs, PPTs, textbooks (Parts 1–6).  
+
+Upload & Manage: Faculty upload/edit/delete (Parts 4–6).  
+
+Content Preview with Hints: Previews and likes stats (Parts 7–8).  
+
+Real-Time Analytics: Faculty view stats (Part 9).  
+
+Smart Tag Suggestions: Rule-based AI tags (Part 10).  
+
+Enrollment Sync: Enhanced UA sync for CM access (Part 11).  
+
+Admin Controls:  
+Delete student (Part 12, enhances UA /delete-student).  
+
+Add faculty (Part 13, enhances UA /add-faculty).  
+
+Assign subjects (Part 14, enhances UA /assign-subject).  
+
+Link content (Part 15, new CM feature).  
+
+Not Redone: UA’s /delete-faculty, /add-dept, /delete-dept, /unassign-subject, /delete-self are available but not needed for CM—stubs for future use.
+Integration: Home Page “Content” tile, UA /user-info for role/dept_id, stubs for other modules (all parts).  
+
+UI/UX: High-end CSS, professional animations (fadeIn, pulse, etc.), FontAwesome icons throughout.
+Removed: MFA, OTP, SMS (Twilio) as requested.
+Enhanced: Mocked Claude API (with real key option), rule-based AI, UA integrations for sync/delete/assign.
+Notes for Replit AI
+No Coding Yet: This is a planning blueprint—don’t build anything now!  
+
+CM Module Only: Focus on content management—no other features beyond stubs.  
+
+No UA Redo: Enhance existing UA endpoints (/sync-students, /delete-student, etc.) for CM—don’t rebuild them.  
+
+Must Be Gorgeous: Use high-end CSS, TailwindCSS, Animate.css (sparingly, professionally), and FontAwesome icons—every page should thrill users, even kids!  
+
+Real Tools: Run actual Python rule-based AI, Pandas, and mocked Claude API (unless I provide a key)—no mocks for core logic.  
+
+Tech Stack Lock: Use only listed tools (React.js, FastAPI, SQLite, etc.). Any changes need my approval.  
+
+Simple Insights: Analytics must be clear, like “Lots of students watched this!”—valuable, no tech jargon.  
+
+Dissertation Context: This is for my M.Tech dissertation at BITS Pilani, now called Flipped Patashala.
+

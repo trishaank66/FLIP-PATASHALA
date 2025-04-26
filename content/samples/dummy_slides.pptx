@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Design Principles</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .slide-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .slide-header {
+      background-color: #1877F2;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slide-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .slide-number {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .slide-content {
+      padding: 30px;
+    }
+    .slide-title {
+      color: #1877F2;
+      margin-top: 0;
+      margin-bottom: 30px;
+      font-size: 28px;
+      text-align: center;
+    }
+    .slide-body {
+      display: flex;
+      min-height: 350px;
+    }
+    .slide-text {
+      flex: 1;
+      padding-right: 30px;
+    }
+    .slide-image {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .slide-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
+      background-color: #f0f0f0;
+      border-top: 1px solid #ddd;
+    }
+    .nav-button {
+      background-color: #1877F2;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    .point {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .point-number {
+      background-color: #1877F2;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    .point-text {
+      flex: 1;
+    }
+    .diagram {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <div class="slide-header">
+      <h1>Database Design Fundamentals</h1>
+      <div class="slide-number">4 / 25</div>
+    </div>
+    
+    <div class="slide-content">
+      <h2 class="slide-title">Normalization: Key Principles</h2>
+      
+      <div class="slide-body">
+        <div class="slide-text">
+          <div class="point">
+            <div class="point-number">1</div>
+            <div class="point-text">
+              <strong>First Normal Form (1NF)</strong>
+              <ul>
+                <li>Eliminate repeating groups</li>
+                <li>Create separate tables for related data</li>
+                <li>Identify each set of related data with a primary key</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="point">
+            <div class="point-number">2</div>
+            <div class="point-text">
+              <strong>Second Normal Form (2NF)</strong>
+              <ul>
+                <li>Meet all requirements of 1NF</li>
+                <li>Remove subsets of data that apply to multiple rows</li>
+                <li>Create separate tables with foreign keys</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="point">
+            <div class="point-number">3</div>
+            <div class="point-text">
+              <strong>Third Normal Form (3NF)</strong>
+              <ul>
+                <li>Meet all requirements of 2NF</li>
+                <li>Remove columns not dependent on the primary key</li>
+                <li>Eliminate transitive dependencies</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="slide-image">
+          <!-- SVG diagram for normalization -->
+          <svg class="diagram" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- Database table representation -->
+            <rect x="50" y="30" width="300" height="60" rx="5" fill="#e3f2fd" stroke="#1877F2" stroke-width="2"/>
+            <text x="200" y="65" text-anchor="middle" font-size="16" font-weight="bold">Unnormalized Data</text>
+            
+            <rect x="50" y="120" width="300" height="60" rx="5" fill="#e3f2fd" stroke="#1877F2" stroke-width="2"/>
+            <text x="200" y="155" text-anchor="middle" font-size="16" font-weight="bold">1NF</text>
+            
+            <rect x="50" y="210" width="300" height="60" rx="5" fill="#e3f2fd" stroke="#1877F2" stroke-width="2"/>
+            <text x="200" y="245" text-anchor="middle" font-size="16" font-weight="bold">2NF / 3NF</text>
+            
+            <!-- Arrows -->
+            <path d="M200,90 L200,120" stroke="#1877F2" stroke-width="2" marker-end="url(#arrowhead)"/>
+            <path d="M200,180 L200,210" stroke="#1877F2" stroke-width="2" marker-end="url(#arrowhead)"/>
+            
+            <!-- Arrow marker definition -->
+            <defs>
+              <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                <polygon points="0 0, 10 3.5, 0 7" fill="#1877F2"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slide-nav">
+      <button class="nav-button" title="Previous slide">Previous</button>
+      <button class="nav-button" title="Next slide">Next</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+Part 14: Admins Signing Off
+What We’re Doing
+Admins might want to leave, like finishing a chapter in my dissertation. Let’s add a “Delete Self” button to the dashboard from Part 14, letting admins exit and logging it, continuing admin control.
+What We Need 
+•	A /delete-self endpoint to mark admins as inactive in “users”. 
+•	Log deletions in “audit_log” (e.g., “Admin Kumar left”). 
+•	A “Delete Self” button with a “pulse” animation and a warning icon.
+Who Can Do What 
+•	Students: 
+o	Can: Log in, see their group. 
+o	Can’t: Delete admins or see the dashboard. 
+o	Understands: “Your system stays strong!”
+•	Faculty: 
+o	Can: Log in, see their group. 
+o	Can’t: Delete admins or use admin tools. 
+o	Understands: “Admins manage smoothly!”
+•	Admins: 
+o	Can: Log in, sync/add/delete students, add/delete faculty, add/delete groups, delete themselves, verify faculty. 
+o	Can’t: See AI insights yet—that’s last! 
+o	Understands: “Leave if you need to—your call!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the dashboard, TailwindCSS for design, Animate.css for “pulse” effect, FontAwesome for a warning icon (fa-exclamation-triangle). 
+•	Backend: FastAPI for /delete-self, SQLite for updates. 
+•	Database: SQLite for “users” and “audit_log”. 
+•	AI Tools: None—just admin exits.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Plan the /delete-self endpoint for secure exit. 
+2.	Ensure “audit_log” captures admin deletions. 
+3.	Update “users” table for inactive admins. 
+4.	Choose “pulse” animation and warning icon for UX.
+Why It’s Cool
+The pulsing button gives admins freedom, keeping control intuitive and safe!
+
+
+let us start part <14> . of the user <authentication module> .first prepare a plan  which single unified plan without subplans which contains all real tools api's frameworks as mentioned in that “part”information. so you are plan should contain all those functionalities and all tools Technologies mention for that part. first provide a plan as mentioned and ask for approval before starting the implementation of that part.scrictly confine to given technologies,tool,apis given in the prompt above
+
+
+implementation plan should contain REAL front end, back end , database, AI  tools simultaneously
+Tools Needed 
+•	Frontend: React.js (Next.js) for the dashboard, TailwindCSS for design, Animate.css for “pulse” effect, FontAwesome for a warning icon (fa-exclamation-triangle). 
+•	Backend: FastAPI for /delete-self, SQLite for updates. 
+•	Database: SQLite for “users” and “audit_log”. 
+•	AI Tools: None—just admin exits.
+
+USE THE SAME TOOLS AS MENTIONED ABOVE IN PLANNAING AND IMPLEMENATION
+
+

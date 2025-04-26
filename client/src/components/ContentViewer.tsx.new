@@ -1,0 +1,308 @@
+import React, { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faVideo, faBook, faFileAlt, faDownload, faEye, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { useLocation } from 'wouter';
+import ContentPlayer from './ContentPlayer';
+import 'animate.css';
+
+// Define the content item type
+type Content = {
+  id: number;
+  title: string;
+  description: string | null;
+  subject: string;
+  faculty: string | null;
+  type: string;
+  filename: string;
+  url: string;
+  views: number;
+  uploaded_by: number | null;
+  created_at: string;
+  dept_id: number | null;
+  updated_at: string;
+  department?: {
+    id: number;
+    name: string;
+    description: string | null;
+    created_at: string;
+  } | null;
+  uploader?: {
+    id: number;
+    email: string;
+    first_name: string | null;
+    last_name: string | null;
+    role: string;
+  } | null;
+};
+
+interface ContentViewerProps {
+  departmentId?: number;
+}
+
+const ContentViewer: React.FC<ContentViewerProps> = ({ departmentId }) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState('all');
+  const [, navigate] = useLocation();
+  const [selectedContent, setSelectedContent] = useState<Content | null>(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+
+  // Fetch all content or department-specific content
+  const { data: contentItems, isLoading, error } = useQuery({
+    queryKey: departmentId 
+      ? ['/api/content/department', departmentId] 
+      : ['/api/content'],
+    queryFn: async ({ queryKey }) => {
+      const url = departmentId 
+        ? `/api/content/department/${departmentId}` 
+        : '/api/content';
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch content');
+      }
+      return response.json() as Promise<Content[]>;
+    },
+    enabled: !!user // Only fetch if user is logged in
+  });
+
+  // Apply CSS classes for animation when content loads
+  useEffect(() => {
+    if (contentItems && !isLoading) {
+      const cards = document.querySelectorAll('.content-card');
+      cards.forEach((card, i) => {
+        // Use CSS classes for animation instead of motion library
+        setTimeout(() => {
+          card.classList.add('animate__animated', 'animate__fadeInUp');
+        }, i * 100);
+      });
+    }
+  }, [contentItems, isLoading]);
+
+  // Helper function for back button to ensure consistency
+  const renderBackButton = () => (
+    <Button 
+      variant="outline" 
+      className="mb-4"
+      onClick={() => navigate(user?.role === 'admin' ? '/admin' : '/home')}
+    >
+      <FontAwesomeIcon icon={faChevronLeft} className="mr-2" />
+      Back to {user?.role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+    </Button>
+  );
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        {/* Back button at the top */}
+        {renderBackButton()}
+      
+        <h2 className="text-2xl font-bold">Content Library</h2>
+        {[1, 2, 3].map((i) => (
+          <Card key={i} className="w-full">
+            <CardHeader>
+              <Skeleton className="h-5 w-40" />
+              <Skeleton className="h-4 w-20" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-24 w-full" />
+            </CardContent>
+            <CardFooter>
+              <Skeleton className="h-10 w-28" />
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        {/* Back button at the top */}
+        {renderBackButton()}
+        
+        <div className="p-6 text-center">
+          <h2 className="text-2xl font-bold text-red-500">Error Loading Content</h2>
+          <p className="mt-2">Unable to load content. Please try again later.</p>
+          <p className="text-sm text-gray-500 mt-4">{(error as Error).message}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!contentItems || contentItems.length === 0) {
+    return (
+      <div className="space-y-4">
+        {/* Back button at the top */}
+        {renderBackButton()}
+        
+        <div className="p-6 text-center">
+          <h2 className="text-2xl font-bold">No Content Available</h2>
+          <p className="mt-2">There are no learning resources available at this time.</p>
+          {user?.role === 'faculty' && (
+            <div className="mt-6">
+              <Button>Upload New Content</Button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Get unique content types for filtering
+  const uniqueTypes = contentItems.reduce((types: string[], item) => {
+    if (!types.includes(item.type)) {
+      types.push(item.type);
+    }
+    return types;
+  }, []);
+  const contentTypes = ['all', ...uniqueTypes];
+
+  // Filter content by type if a specific tab is selected
+  const filteredContent = activeTab === 'all'
+    ? contentItems
+    : contentItems.filter(item => item.type === activeTab);
+
+  // Helper function to get icon based on content type
+  const getContentIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'video':
+        return faVideo;
+      case 'notes':
+        return faBook;
+      case 'slides':
+      case 'presentation':
+        return faFileAlt;
+      default:
+        return faFileAlt;
+    }
+  };
+
+  const handleDownload = (item: Content) => {
+    // In a real implementation, this would download the file
+    toast({
+      title: "Download Started",
+      description: `Downloading ${item.filename}...`,
+    });
+  };
+  
+  const handleWatchClick = (item: Content) => {
+    setSelectedContent(item);
+    setIsPlayerOpen(true);
+    
+    // Add wiggle animation to the button when clicked
+    const buttons = document.querySelectorAll('.watch-button');
+    buttons.forEach(button => {
+      button.classList.remove('animate__animated', 'animate__shakeX');
+    });
+
+    // Find the specific button for this item and add animation
+    const buttonElement = document.querySelector(`#watch-button-${item.id}`);
+    if (buttonElement) {
+      buttonElement.classList.add('animate__animated', 'animate__shakeX');
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Back button at the top */}
+      {renderBackButton()}
+    
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Learning Resources</h2>
+        {user?.role === 'faculty' && (
+          <Button>Upload New Content</Button>
+        )}
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="mb-4">
+          {contentTypes.map(type => (
+            <TabsTrigger key={type} value={type} className="capitalize">
+              {type}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        <TabsContent value={activeTab} className="space-y-4">
+          {filteredContent.map(item => (
+            <Card key={item.id} className="content-card w-full">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <FontAwesomeIcon 
+                        icon={getContentIcon(item.type)} 
+                        className="mr-2 text-primary" 
+                      />
+                      {item.title}
+                    </CardTitle>
+                    <CardDescription>{item.subject}</CardDescription>
+                  </div>
+                  <Badge variant="outline" className="capitalize">{item.type}</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm">{item.description || 'No description available.'}</p>
+                
+                <div className="mt-4 flex flex-wrap gap-2 text-xs text-gray-500">
+                  {item.department && (
+                    <Badge variant="secondary">
+                      {item.department.name}
+                    </Badge>
+                  )}
+                  {item.faculty && (
+                    <span className="text-sm">
+                      Faculty: {item.faculty}
+                    </span>
+                  )}
+                  <span className="text-sm">
+                    Added: {new Date(item.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-wrap justify-between gap-2">
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="default" 
+                    id={`watch-button-${item.id}`}
+                    className="watch-button hover:animate__animated hover:animate__pulse" 
+                    onClick={() => handleWatchClick(item)}
+                  >
+                    <FontAwesomeIcon icon={faEye} className="mr-2" />
+                    Watch
+                  </Button>
+                  <Button variant="outline" onClick={() => handleDownload(item)}>
+                    <FontAwesomeIcon icon={faDownload} className="mr-2" />
+                    Download
+                  </Button>
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <FontAwesomeIcon icon={faEye} className="mr-1" />
+                  <span>{item.views} views</span>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+        </TabsContent>
+      </Tabs>
+      
+      {/* Content Player Modal */}
+      <ContentPlayer
+        content={selectedContent}
+        open={isPlayerOpen}
+        onClose={() => setIsPlayerOpen(false)}
+      />
+    </div>
+  );
+};
+
+export default ContentViewer;

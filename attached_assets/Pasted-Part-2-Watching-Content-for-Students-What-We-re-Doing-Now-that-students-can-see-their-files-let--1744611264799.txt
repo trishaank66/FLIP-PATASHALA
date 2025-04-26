@@ -1,0 +1,59 @@
+Part 2: Watching Content for Students
+What We’re Doing
+Now that students can see their files, let’s let them watch videos or view notes, like flipping open a fun book! This is a new CM feature, adding “Watch” buttons to the list from Part 1, with a subtle wiggle animation to make clicking exciting.
+What We Need  
+Add “Watch” buttons to the student content list for MP4s, PDFs, and PPTs.  
+
+Update /get-content to stream/display files (e.g., video player for MP4, PDF viewer).  
+
+Add a views column to the “content” table to track watches.  
+
+A “wiggle” animation for buttons and a FontAwesome eye icon.
+Who Can Do What  
+Students:  
+Can: Click “Watch” to view videos/notes for their group (e.g., “CSE”).  
+
+Can’t: Download or edit files—just watch.  
+
+Understands: “Press play to learn something cool!”
+Faculty:  
+Can: Log in (upload soon).  
+
+Can’t: Watch student files or manage content yet.  
+
+Understands: “Your files will reach students soon!”
+Admins:  
+Can: Log in (controls later).  
+
+Can’t: Watch content yet—more to come!  
+
+Understands: “You’ll check what students see later!”
+Tools Needed  
+Frontend: React.js (Next.js) for the student page, TailwindCSS for styling, Animate.css for “wiggle” effect, FontAwesome for an eye icon (fa-eye).  
+
+Backend: FastAPI for /get-content streaming, SQLite for view tracking.  
+
+Database: SQLite to update “content” table (add views).  
+
+Storage: SQLite BLOB/filesystem for file access.  
+
+AI Tools: None—just watching files.  
+
+Tech Stack Rule: Use only these tools. Any changes need my approval first.
+Strict Mandate for Replit AI
+Dear Replit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Add “Watch” buttons to the student content list design.  
+
+Update /get-content for streaming/viewing logic.  
+
+Modify “content” table to track views.  
+
+Choose “wiggle” animation and eye icon for an engaging UX.  
+
+Ensure high-end CSS, alignment, colors, icons, and spacing—delightful for all users, even kids.
+UX Mandate
+All pages must have proper styling, alignment, structure, high-end animations (used sparingly, only where needed), good colors, and FontAwesome icons. The UX should delight users, and even a child should understand it.
+Why It’s Cool
+The wiggling buttons make watching content feel like starting an adventure, keeping students hooked!
+

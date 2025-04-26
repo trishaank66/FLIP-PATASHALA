@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sample PDF Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #1877F2;
+    }
+    h2 {
+      color: #4267B2;
+      margin-top: 30px;
+    }
+    .content {
+      margin-bottom: 20px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #666;
+      font-size: 0.8em;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Advanced Algorithms</h1>
+    <p>Educational Material for Computer Science Students</p>
+  </div>
+
+  <div class="content">
+    <h2>Introduction to Graph Algorithms</h2>
+    <p>
+      Graph algorithms are a set of instructions that traverse (visit) nodes of a graph. Common graph algorithms include depth-first search, breadth-first search, and Dijkstra's algorithm for finding the shortest path.
+    </p>
+    
+    <h3>Depth-First Search (DFS)</h3>
+    <p>
+      Depth-first search is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node (selecting some arbitrary node as the root in the case of a graph) and explores as far as possible along each branch before backtracking.
+    </p>
+    <pre>
+function dfs(graph, start):
+    visited = set()
+    
+    function dfs_recursive(node):
+        if node in visited:
+            return
+        visited.add(node)
+        print(node)
+        
+        for neighbor in graph[node]:
+            dfs_recursive(neighbor)
+    
+    dfs_recursive(start)
+    </pre>
+    
+    <h3>Breadth-First Search (BFS)</h3>
+    <p>
+      Breadth-first search is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root (or some arbitrary node of a graph), and explores all of the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level.
+    </p>
+    <pre>
+function bfs(graph, start):
+    visited = set()
+    queue = [start]
+    visited.add(start)
+    
+    while queue is not empty:
+        node = queue.pop(0)
+        print(node)
+        
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    </pre>
+  </div>
+
+  <div class="content">
+    <h2>Dynamic Programming</h2>
+    <p>
+      Dynamic programming is both a mathematical optimization method and a computer programming method. The method was developed by Richard Bellman in the 1950s.
+    </p>
+    <p>
+      Dynamic programming breaks down a complex problem into simpler subproblems, solving each subproblem just once and storing the solution to avoid redundant calculations.
+    </p>
+    
+    <h3>Fibonacci Sequence Example</h3>
+    <p>
+      A classic example is computing the Fibonacci sequence. The naive recursive approach has exponential time complexity:
+    </p>
+    <pre>
+function fib(n):
+    if n <= 1:
+        return n
+    return fib(n-1) + fib(n-2)
+    </pre>
+    
+    <p>
+      Using dynamic programming with memoization, we improve to linear time complexity:
+    </p>
+    <pre>
+function fib_memo(n, memo={}):
+    if n in memo:
+        return memo[n]
+    if n <= 1:
+        return n
+    memo[n] = fib_memo(n-1, memo) + fib_memo(n-2, memo)
+    return memo[n]
+    </pre>
+  </div>
+
+  <div class="footer">
+    <p>FLIP Patashala - Advanced Learning Materials - Page 1</p>
+  </div>
+</body>
+</html>

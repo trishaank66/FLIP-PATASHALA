@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Poll Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .poll-container {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .option-label {
+      flex: 1;
+    }
+    .option-bar {
+      flex: 2;
+      height: 20px;
+      background-color: #e0e0ff;
+      position: relative;
+      margin: 0 10px;
+    }
+    .option-bar-fill {
+      height: 100%;
+      background-color: #3b82f6;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+    .option-percent {
+      width: 50px;
+      text-align: right;
+    }
+    #log {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    input, select {
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+    }
+    .form-row {
+      margin-bottom: 15px;
+    }
+    .label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    #optionsContainer {
+      margin: 10px 0;
+    }
+    .option-input {
+      display: flex;
+      margin-bottom: 5px;
+    }
+    .option-input input {
+      flex: 1;
+      margin-right: 10px;
+      margin-bottom: 0;
+    }
+    .remove-option {
+      background-color: #ef4444;
+      padding: 8px;
+    }
+    .add-option {
+      background-color: #10b981;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-time Poll Testing</h1>
+  
+  <div class="poll-container">
+    <h2>Create Poll</h2>
+    <div class="form-row">
+      <span class="label">Question:</span>
+      <input type="text" id="pollQuestion" placeholder="Enter your poll question">
+    </div>
+    
+    <div class="form-row">
+      <span class="label">Options:</span>
+      <div id="optionsContainer">
+        <div class="option-input">
+          <input type="text" placeholder="Option 1" class="pollOption">
+          <button class="remove-option">✕</button>
+        </div>
+        <div class="option-input">
+          <input type="text" placeholder="Option 2" class="pollOption">
+          <button class="remove-option">✕</button>
+        </div>
+      </div>
+      <button class="add-option">+ Add Option</button>
+    </div>
+    
+    <button id="createPollBtn">Create Poll</button>
+  </div>
+  
+  <div class="poll-container">
+    <h2>Active Polls</h2>
+    <div id="pollsList">
+      <p>No active polls available</p>
+    </div>
+  </div>
+  
+  <div class="poll-container">
+    <h2>Vote on Poll</h2>
+    <div class="form-row">
+      <span class="label">Select Poll:</span>
+      <select id="pollSelect">
+        <option value="">-- Select a poll --</option>
+      </select>
+    </div>
+    
+    <div id="voteOptions" style="display: none;">
+      <div class="form-row">
+        <span class="label">Select Option:</span>
+        <select id="optionSelect">
+          <option value="">-- Select an option --</option>
+        </select>
+      </div>
+      
+      <button id="voteBtn">Vote</button>
+    </div>
+    
+    <div id="pollResults" style="display: none;">
+      <h3>Poll Results</h3>
+      <div id="resultsContainer"></div>
+      <button id="refreshResultsBtn">Refresh Results</button>
+    </div>
+  </div>
+  
+  <h2>WebSocket Connection Log</h2>
+  <div id="log"></div>
+  <button id="connectBtn">Connect to WebSocket</button>
+  <button id="disconnectBtn">Disconnect</button>
+  
+  <script>
+    // DOM Elements
+    const logElement = document.getElementById('log');
+    const pollsList = document.getElementById('pollsList');
+    const pollSelect = document.getElementById('pollSelect');
+    const optionSelect = document.getElementById('optionSelect');
+    const voteOptions = document.getElementById('voteOptions');
+    const pollResults = document.getElementById('pollResults');
+    const resultsContainer = document.getElementById('resultsContainer');
+    
+    // State
+    let socket = null;
+    let activePolls = [];
+    let currentPollOptions = [];
+    
+    // Logging function
+    function log(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.style.color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+      entry.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+      logElement.appendChild(entry);
+      logElement.scrollTop = logElement.scrollHeight;
+    }
+    
+    // Connect to WebSocket
+    document.getElementById('connectBtn').addEventListener('click', () => {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        log('Already connected');
+        return;
+      }
+      
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host}/ws`;
+      
+      log(`Connecting to WebSocket at ${wsUrl}...`);
+      
+      try {
+        socket = new WebSocket(wsUrl);
+        
+        socket.onopen = () => {
+          log('WebSocket connection established!', 'success');
+          // Subscribe to poll updates
+          sendMessage({
+            type: 'subscribe',
+            channel: 'polls'
+          });
+        };
+        
+        socket.onclose = (event) => {
+          if (event.wasClean) {
+            log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+          } else {
+            log('Connection died unexpectedly', 'error');
+          }
+        };
+        
+        socket.onerror = (error) => {
+          log(`WebSocket error: ${error}`, 'error');
+        };
+        
+        socket.onmessage = (event) => {
+          log(`Received: ${event.data}`);
+          try {
+            const data = JSON.parse(event.data);
+            handleSocketMessage(data);
+          } catch (error) {
+            log(`Error parsing message: ${error.message}`, 'error');
+          }
+        };
+      } catch (error) {
+        log(`Error creating WebSocket: ${error.message}`, 'error');
+      }
+    });
+    
+    // Disconnect WebSocket
+    document.getElementById('disconnectBtn').addEventListener('click', () => {
+      if (!socket) {
+        log('No active connection');
+        return;
+      }
+      
+      socket.close();
+      socket = null;
+      log('Disconnected from WebSocket');
+    });
+    
+    // Send message via WebSocket
+    function sendMessage(message) {
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        log('Not connected to WebSocket', 'error');
+        return;
+      }
+      
+      const messageStr = JSON.stringify(message);
+      socket.send(messageStr);
+      log(`Sent: ${messageStr}`);
+    }
+    
+    // Handle WebSocket messages
+    function handleSocketMessage(data) {
+      if (data.type === 'poll_update') {
+        updatePollResults(data.poll);
+      } else if (data.type === 'new_poll') {
+        refreshPolls();
+      }
+    }
+    
+    // Create a new poll
+    document.getElementById('createPollBtn').addEventListener('click', async () => {
+      const question = document.getElementById('pollQuestion').value.trim();
+      if (!question) {
+        alert('Please enter a poll question');
+        return;
+      }
+      
+      const optionInputs = document.querySelectorAll('.pollOption');
+      const options = Array.from(optionInputs).map(input => input.value.trim()).filter(v => v);
+      
+      if (options.length < 2) {
+        alert('Please add at least two options');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/il/polls', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question,
+            options
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        const result = await response.json();
+        log(`Poll created: ${result.id}`, 'success');
+        
+        // Clear the form
+        document.getElementById('pollQuestion').value = '';
+        optionInputs.forEach(input => input.value = '');
+        
+        // Refresh polls list
+        refreshPolls();
+      } catch (error) {
+        log(`Error creating poll: ${error.message}`, 'error');
+      }
+    });
+    
+    // Add option
+    document.querySelector('.add-option').addEventListener('click', () => {
+      const container = document.getElementById('optionsContainer');
+      const optionCount = container.querySelectorAll('.option-input').length + 1;
+      
+      const optionDiv = document.createElement('div');
+      optionDiv.className = 'option-input';
+      optionDiv.innerHTML = `
+        <input type="text" placeholder="Option ${optionCount}" class="pollOption">
+        <button class="remove-option">✕</button>
+      `;
+      
+      container.appendChild(optionDiv);
+      
+      // Add event listener to the new remove button
+      optionDiv.querySelector('.remove-option').addEventListener('click', function() {
+        container.removeChild(optionDiv);
+      });
+    });
+    
+    // Remove option event delegation
+    document.getElementById('optionsContainer').addEventListener('click', (event) => {
+      if (event.target.classList.contains('remove-option')) {
+        const container = document.getElementById('optionsContainer');
+        if (container.querySelectorAll('.option-input').length > 2) {
+          event.target.closest('.option-input').remove();
+        } else {
+          alert('At least two options are required');
+        }
+      }
+    });
+    
+    // Load polls
+    async function refreshPolls() {
+      try {
+        const response = await fetch('/api/il/polls');
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        const polls = await response.json();
+        activePolls = polls;
+        
+        if (polls.length === 0) {
+          pollsList.innerHTML = '<p>No active polls available</p>';
+          pollSelect.innerHTML = '<option value="">-- Select a poll --</option>';
+        } else {
+          // Update polls list
+          pollsList.innerHTML = polls.map(poll => `
+            <div class="poll-item">
+              <h3>${poll.question}</h3>
+              <p>ID: ${poll.id} | Created: ${new Date(poll.created_at).toLocaleString()}</p>
+            </div>
+          `).join('');
+          
+          // Update poll select dropdown
+          pollSelect.innerHTML = '<option value="">-- Select a poll --</option>' + 
+            polls.map(poll => `<option value="${poll.id}">${poll.question}</option>`).join('');
+        }
+      } catch (error) {
+        log(`Error fetching polls: ${error.message}`, 'error');
+        pollsList.innerHTML = '<p>Error loading polls</p>';
+      }
+    }
+    
+    // Handle poll selection
+    pollSelect.addEventListener('change', async () => {
+      const pollId = pollSelect.value;
+      
+      if (!pollId) {
+        voteOptions.style.display = 'none';
+        pollResults.style.display = 'none';
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/api/il/polls/${pollId}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        const poll = await response.json();
+        currentPollOptions = poll.options;
+        
+        // Update option select dropdown
+        optionSelect.innerHTML = '<option value="">-- Select an option --</option>' + 
+          poll.options.map(option => `<option value="${option.id}">${option.text}</option>`).join('');
+        
+        voteOptions.style.display = 'block';
+        pollResults.style.display = 'block';
+        updatePollResultsView(poll);
+      } catch (error) {
+        log(`Error fetching poll details: ${error.message}`, 'error');
+      }
+    });
+    
+    // Vote on poll
+    document.getElementById('voteBtn').addEventListener('click', async () => {
+      const pollId = pollSelect.value;
+      const optionId = optionSelect.value;
+      
+      if (!pollId || !optionId) {
+        alert('Please select both a poll and an option');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/api/il/polls/${pollId}/vote`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ option_id: optionId })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        log('Vote submitted successfully', 'success');
+        
+        // Update the results
+        const updatedPoll = await fetch(`/api/il/polls/${pollId}`).then(res => res.json());
+        updatePollResultsView(updatedPoll);
+      } catch (error) {
+        log(`Error submitting vote: ${error.message}`, 'error');
+      }
+    });
+    
+    // Refresh results
+    document.getElementById('refreshResultsBtn').addEventListener('click', async () => {
+      const pollId = pollSelect.value;
+      if (!pollId) return;
+      
+      try {
+        const response = await fetch(`/api/il/polls/${pollId}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        const poll = await response.json();
+        updatePollResultsView(poll);
+      } catch (error) {
+        log(`Error refreshing results: ${error.message}`, 'error');
+      }
+    });
+    
+    // Update poll results when received via WebSocket
+    function updatePollResults(poll) {
+      const selectedPollId = pollSelect.value;
+      if (selectedPollId && selectedPollId === poll.id.toString()) {
+        updatePollResultsView(poll);
+      }
+    }
+    
+    // Update the poll results view
+    function updatePollResultsView(poll) {
+      if (!poll.options) return;
+      
+      const totalVotes = poll.options.reduce((total, option) => total + option.votes, 0);
+      
+      resultsContainer.innerHTML = poll.options.map(option => {
+        const percent = totalVotes === 0 ? 0 : Math.round((option.votes / totalVotes) * 100);
+        return `
+          <div class="option">
+            <div class="option-label">${option.text}</div>
+            <div class="option-bar">
+              <div class="option-bar-fill" style="width: ${percent}%"></div>
+            </div>
+            <div class="option-percent">${percent}% (${option.votes})</div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Initialize
+    refreshPolls();
+  </script>
+</body>
+</html>

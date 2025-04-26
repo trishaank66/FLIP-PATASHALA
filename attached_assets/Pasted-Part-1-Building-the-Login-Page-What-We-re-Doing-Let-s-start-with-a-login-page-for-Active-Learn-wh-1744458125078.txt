@@ -1,0 +1,51 @@
+Part 1: Building the Login Page
+What We’re Doing
+Let’s start with a login page for Active Learn where students, faculty, and admins can enter with an email and password. It’s like a shiny key that unlocks my dissertation project! The page will fade in softly, with a glowing key icon to welcome everyone.
+What We Need  
+A login page with email and password fields, a “Login” button, a “Register?” link, and a “Back to Home” button.  
+
+A SQLite “users” table (id, email, password_hash, role).  
+
+A /login endpoint to check email/password and issue a JWT token.  
+
+A “fadeIn” animation for the page and a key icon.
+Who Can Do What  
+Students:  
+Can: Enter email/password to log in and see the Home Page.  
+
+Can’t: Manage users or change settings—just their own login.  
+
+Understands: “Type your email and password to start learning!”
+Faculty:  
+Can: Log in with email/password to see the Home Page.  
+
+Can’t: Control the system or edit users—just log in.  
+
+Understands: “Login to check your classes!”
+Admins:  
+Can: Log in with email/password to see the Home Page.  
+
+Can’t: Do admin tasks yet—those are coming!  
+
+Understands: “Login to manage the system!”
+Tools Needed  
+Frontend: React.js (Next.js) for the login page, TailwindCSS for blue (#1877F2) and white (#FFFFFF) style, Animate.css for “fadeIn” effect, FontAwesome for a key icon (fa-key).  
+
+Backend: FastAPI for /login, PyJWT for tokens, bcrypt for hashing passwords.  
+
+Database: SQLite for “users” table (columns: id, email, password_hash, role).  
+
+AI Tools: None yet—just opening the door.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Design a login page layout with email, password, and buttons.  
+
+Plan the SQLite “users” table structure.  
+
+Outline the /login endpoint to verify credentials and issue JWT.  
+
+Choose “fadeIn” animation and key icon for UX.
+Why It’s Cool
+The glowing login page feels like a warm welcome, making it easy and secure to start, setting the stage for my dissertation’s success!
+

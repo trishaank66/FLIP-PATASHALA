@@ -1,0 +1,40 @@
+
+
+
+PART 7Syncing Students in Bulk
+What We’re Doing
+Let’s add tons of students at once, like inviting a whole class to my project! Admins will upload a CSV to sync students with groups from Part 6. A dashboard button will pulse to make it exciting, building on admin verification.
+What We Need 
+•	A /sync-students endpoint to read CSV and add students to “users”. 
+•	An admin dashboard with a “Sync Students” button. 
+•	Save students with role=“student”, dept_id, and verification_pending=false (auto-verified). 
+•	A “pulse” animation for the button and an upload icon.
+Who Can Do What 
+•	Students: 
+o	Can: Log in if synced, see their group on the Home Page. 
+o	Can’t: Upload CSVs or see the dashboard. 
+o	Understands: “You’re added—start exploring!”
+•	Faculty: 
+o	Can: Log in if verified, see their group. 
+o	Can’t: Sync students or use admin tools. 
+o	Understands: “Your classes are growing!”
+•	Admins: 
+o	Can: Log in, verify faculty, sync students via CSV. 
+o	Can’t: Add students manually yet—next part! 
+o	Understands: “Upload a list to fill your groups!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the dashboard, TailwindCSS for design, Animate.css for “pulse” effect, FontAwesome for an upload icon (fa-cloud-upload-alt). 
+•	Backend: FastAPI for /sync-students, Pandas to process CSV. 
+•	Database: SQLite to store students in “users”. 
+•	AI Tools: Pandas for real CSV parsing—no fakes!
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Design the CSV format (ID, email, role, department). 
+2.	Plan the /sync-students endpoint to parse and save data. 
+3.	Update “users” table for auto-verified students. 
+4.	Choose “pulse” animation and upload icon for UX.
+Why It’s Cool
+The pulsing button feels like magic, instantly growing Active Learn’s student base!
+let us start part <7> of user authentication module  first prepare a plan single unified plan without subplans which contains all real tools api's frameworks as mentioned in that part information. so you are plan should contain all those functionalities and all tools Technologies mention for that part. first provide a plan as mentioned and ask for approval before starting the implementation of that part
+implementation plan should contain REAL front end, back end , database, AI  tools simultaneously

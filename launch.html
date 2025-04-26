@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=http://localhost:3000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLIP Patashala - Launch Portal</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+      background-color: #f8fafc;
+      color: #334155;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #2563eb;
+      margin-bottom: 10px;
+    }
+    .status-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .loader {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 5px solid #e2e8f0;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s ease-in-out infinite;
+      margin: 20px 0;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn {
+      display: inline-block;
+      background-color: #3b82f6;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background-color: #1d4ed8;
+      transform: translateY(-2px);
+    }
+    .server-badge {
+      display: inline-block;
+      background-color: #dbeafe;
+      color: #1e40af;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    .details {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #64748b;
+    }
+    .details pre {
+      text-align: left;
+      background: #f1f5f9;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+  <script>
+    // Auto-navigate after short delay
+    setTimeout(() => {
+      window.location.href = "http://localhost:3000";
+    }, 1500);
+    
+    // Track if we successfully navigated
+    let hasNavigated = false;
+    
+    // Check if the port is still available
+    async function checkPortStatus() {
+      if (hasNavigated) return;
+      
+      try {
+        const response = await fetch("http://localhost:3000", {
+          method: 'HEAD',
+          cache: 'no-store',
+          mode: 'no-cors'
+        });
+        
+        // If we got here, the port is still available
+        document.getElementById('status').textContent = "Connected! Redirecting...";
+        document.getElementById('statusIndicator').style.color = "#10b981";
+      } catch (error) {
+        // Port is no longer available
+        document.getElementById('status').textContent = "Connection lost! Please restart the application.";
+        document.getElementById('statusIndicator').style.color = "#ef4444";
+        document.getElementById('redirectMsg').style.display = 'none';
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    }
+    
+    // Record that navigation happened
+    function markAsNavigated() {
+      hasNavigated = true;
+    }
+    
+    // Start checking port status
+    window.addEventListener('load', () => {
+      checkPortStatus();
+      // Check every 3 seconds
+      setInterval(checkPortStatus, 3000);
+    });
+    
+    // Mark as navigated when leaving
+    window.addEventListener('beforeunload', markAsNavigated);
+  </script>
+</head>
+<body>
+  <h1>FLIP Patashala</h1>
+  <div class="status-card">
+    <div class="server-badge">Express API Server</div>
+    <div class="loader"></div>
+    <h2 id="statusIndicator" style="color: #10b981;">✓ Port 3000 is active</h2>
+    <p id="status">Connected! Redirecting to application...</p>
+    
+    <div id="redirectMsg">
+      <p>You'll be automatically redirected in a moment.</p>
+      <a href="http://localhost:3000" class="btn" onclick="markAsNavigated()">Launch Application Now</a>
+    </div>
+    
+    <div id="errorMsg" style="display: none;">
+      <p style="color: #ef4444;">The application server is no longer responding.</p>
+      <button class="btn" onclick="window.location.reload()" style="background-color: #6b7280;">
+        Retry Connection
+      </button>
+    </div>
+  </div>
+  
+  <div class="details">
+    <p>Application running on port 3000 with status code 200</p>
+    <p>If you need to restart the server, run the following command in the terminal:</p>
+    <pre>node flip-launcher.cjs</pre>
+  </div>
+</body>
+</html>

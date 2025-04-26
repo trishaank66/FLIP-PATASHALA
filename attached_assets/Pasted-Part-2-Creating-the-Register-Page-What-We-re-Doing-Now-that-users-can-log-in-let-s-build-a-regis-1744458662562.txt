@@ -1,0 +1,51 @@
+Part 2: Creating the Register Page
+What We’re Doing
+Now that users can log in, let’s build a register page so students, faculty, and admins can sign up for Active Learn. It’s like handing out invitations to join my project! The page will slide in with a sparkly user icon to excite new users.
+What We Need  
+A register page with fields for email, password, role-specific ID (student ID, faculty ID, admin code), a “Register” button, a “Login?” link, and a “Back to Home” button.  
+
+Extend the “users” table with a verification_pending column (true/false).  
+
+A /register endpoint to save user details with pending verification status.  
+
+A “slideInRight” animation for the page and a user icon.
+Who Can Do What  
+Students:  
+Can: Sign up with email, password, and student ID (e.g., “S001”)—wait for verification.  
+
+Can’t: Log in until verified or manage users.  
+
+Understands: “Fill in your details to join the learning fun!”
+Faculty:  
+Can: Sign up with email, password, and faculty ID (e.g., “F001”)—wait for admin approval.  
+
+Can’t: Log in until approved or control the system.  
+
+Understands: “Sign up to start teaching!”
+Admins:  
+Can: Sign up with email, password, and admin code (e.g., “ADMIN123”)—wait for verification.  
+
+Can’t: Use admin tools until verified.  
+
+Understands: “Register to manage everything!”
+Tools Needed  
+Frontend: React.js (Next.js) for the register page, TailwindCSS for styling, Animate.css for “slideInRight” effect, FontAwesome for a user icon (fa-user).  
+
+Backend: FastAPI for /register, bcrypt for hashing passwords.  
+
+Database: SQLite to update “users” table (add verification_pending).  
+
+AI Tools: None—just setting up sign-ups.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Design the register page with role-specific ID fields.  
+
+Update the “users” table schema for verification status.  
+
+Plan the /register endpoint to save pending users.  
+
+Select “slideInRight” animation and user icon for UX.
+Why It’s Cool
+The sliding register page makes joining Active Learn exciting, building on login to grow my project’s community!
+

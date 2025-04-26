@@ -1,0 +1,49 @@
+Part 3: Verifying Student Sign-Ups
+What We’re Doing
+Let’s make sure students signing up are real by checking their IDs, like confirming tickets at a show. We’ll verify student IDs from Part 2 against a CSV database, so they can log in after approval. A checkmark icon will pulse to show it’s done.
+What We Need  
+A /verify-student endpoint to check student ID against a CSV (e.g., “S001” in “students.csv”).  
+
+Update “users” table to set verification_pending=false for verified students.  
+
+A verification status display on the student’s screen with a “pulse” animation and a checkmark icon.
+Who Can Do What  
+Students:  
+Can: Sign up and see “Verified!” once their ID matches the CSV, then log in.  
+
+Can’t: Verify themselves or manage others.  
+
+Understands: “Your ID’s good—you’re ready to learn!”
+Faculty:  
+Can: Sign up (still pending approval).  
+
+Can’t: Verify students or log in yet.  
+
+Understands: “Wait for admin to approve you!”
+Admins:  
+Can: Log in (if verified).  
+
+Can’t: Verify students manually yet—automatic for now.  
+
+Understands: “Students are auto-checked for you!”
+Tools Needed  
+Frontend: React.js (Next.js) for verification status, TailwindCSS for style, Animate.css for “pulse” effect, FontAwesome for a checkmark icon (fa-check).  
+
+Backend: FastAPI for /verify-student, Pandas to read CSV for ID matching.  
+
+Database: SQLite to update “users” table.  
+
+AI Tools: Pandas for real CSV processing—no fakes!
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Plan the CSV structure for student IDs.  
+
+Design the /verify-student endpoint logic for ID matching.  
+
+Update “users” table for verification status.  
+
+Choose “pulse” animation and checkmark for student UX.
+Why It’s Cool
+The pulsing checkmark makes students feel trusted, flowing from registration to ensure a secure start!
+

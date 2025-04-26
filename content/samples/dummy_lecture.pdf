@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Lecture Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #1877F2;
+      border-bottom: 2px solid #1877F2;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #1877F2;
+      margin-top: 30px;
+    }
+    .highlight {
+      background-color: #f0f7ff;
+      padding: 15px;
+      border-left: 4px solid #1877F2;
+      margin-bottom: 20px;
+    }
+    .note {
+      background-color: #fffbeb;
+      padding: 10px;
+      border-left: 4px solid #ebb434;
+      margin: 15px 0;
+    }
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .formula {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 15px 0;
+      text-align: center;
+      font-family: "Times New Roman", serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Introduction to Algorithms: Lecture 1</h1>
+  
+  <div class="highlight">
+    <p>This lecture introduces fundamental algorithm concepts and analysis techniques. It covers the basics of computational complexity, algorithm classification, and introduces practical applications.</p>
+  </div>
+  
+  <h2>1. What is an Algorithm?</h2>
+  <p>An algorithm is a finite sequence of well-defined instructions, typically used to solve a class of specific problems or to perform a computation.</p>
+  
+  <div class="note">
+    <p><strong>Algorithm properties:</strong> Finiteness, Definiteness, Effectiveness, Input, and Output</p>
+  </div>
+  
+  <h2>2. Algorithm Analysis</h2>
+  <p>We analyze algorithms primarily to predict resource usage. The most common resources are:</p>
+  <ul>
+    <li>Time (CPU operations)</li>
+    <li>Space (memory)</li>
+    <li>Network bandwidth</li>
+    <li>Power consumption</li>
+  </ul>
+  
+  <h2>3. Big O Notation</h2>
+  <p>Big O notation is used to classify algorithms according to how their run time or space requirements grow as the input size grows.</p>
+  
+  <div class="formula">
+    <p>f(n) = O(g(n)) when there exists constants c and n₀ such that f(n) ≤ c·g(n) for all n ≥ n₀</p>
+  </div>
+  
+  <p>Common complexity classes:</p>
+  <ul>
+    <li><code>O(1)</code> - Constant time</li>
+    <li><code>O(log n)</code> - Logarithmic time</li>
+    <li><code>O(n)</code> - Linear time</li>
+    <li><code>O(n log n)</code> - Linearithmic time</li>
+    <li><code>O(n²)</code> - Quadratic time</li>
+    <li><code>O(n³)</code> - Cubic time</li>
+    <li><code>O(2ⁿ)</code> - Exponential time</li>
+  </ul>
+  
+  <h2>4. Example: Linear Search</h2>
+  <p>Linear search is an example of a simple algorithm with O(n) time complexity:</p>
+  <pre><code>
+  function linearSearch(array, target):
+    for i from 0 to length(array)-1:
+      if array[i] equals target:
+        return i
+    return -1
+  </code></pre>
+  
+  <h2>5. Optimizing Algorithms</h2>
+  <p>When optimizing algorithms, we typically focus on:</p>
+  <ol>
+    <li>Choosing the right data structures</li>
+    <li>Utilizing problem-specific insights</li>
+    <li>Trading space for time (or vice versa)</li>
+    <li>Using parallel processing when applicable</li>
+  </ol>
+  
+  <div class="note">
+    <p><strong>Remember:</strong> Optimizing too early can lead to unnecessary complexity. Profile your code first to identify real bottlenecks.</p>
+  </div>
+  
+  <h2>Next Lecture Preview</h2>
+  <p>In the next lecture, we'll explore sorting algorithms and their complexity analysis.</p>
+  
+  <p><strong>Reading assignments:</strong> Chapter 1-3 in "Introduction to Algorithms" by Cormen et al.</p>
+</body>
+</html>

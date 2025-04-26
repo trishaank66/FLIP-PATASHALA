@@ -1,0 +1,771 @@
+import { useState, useEffect, ReactNode } from "react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
+import { 
+  Loader2, 
+  LightbulbIcon, 
+  BarChart3, 
+  UserX, 
+  Users, 
+  School, 
+  Building2,
+  GraduationCap,
+  CheckCircle,
+  Clock as ClockIcon,
+  BrainCircuit,
+  Sparkles,
+  Home,
+  Building,
+  Info,
+  ArrowRight
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { FaLightbulb } from "react-icons/fa";
+import 'animate.css';
+
+type SectionColor = {
+  bg: string;
+  text: string;
+  bullet: string;
+};
+
+interface SectionInfo {
+  title: string;
+  content: string[];
+  icon: ReactNode;
+  color: SectionColor;
+}
+
+interface SectionsData {
+  [key: string]: SectionInfo | string[];
+  order: string[];
+}
+
+export function AIInsights() {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  // Fetch AI insights data
+  const { data, isLoading, error } = useQuery<any>({
+    queryKey: ['/api/ai-insights'],
+    queryFn: getQueryFn(),
+    refetchInterval: 300000, // Refresh every 5 minutes
+  });
+
+  // Colors for different clusters of departments
+  const getClusterColor = (clusterId: number): string => {
+    const colors = [
+      'bg-purple-500',
+      'bg-blue-500',
+      'bg-green-500',
+      'bg-yellow-500',
+      'bg-pink-500',
+      'bg-indigo-500',
+      'bg-red-500',
+      'bg-teal-500'
+    ];
+    
+    return colors[clusterId % colors.length];
+  };
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle>Loading AI Insights</CardTitle>
+          <CardDescription>
+            Our AI is analyzing your platform data...
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-8">
+          <div className="flex flex-col items-center space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin text-amber-500" />
+            <div className="text-center space-y-2">
+              <p className="text-sm text-gray-500">This might take a few moments</p>
+              <div className="flex items-center justify-center gap-1 text-xs text-gray-400">
+                <BrainCircuit className="h-3 w-3" />
+                <span>Advanced data analysis in progress</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-red-600">Unable to Load Insights</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-start space-x-2">
+            <div className="text-red-500 mt-0.5">
+              <UserX className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-gray-800">We're having trouble getting insights from the AI service.</p>
+              <p className="text-sm text-gray-600 mt-2">This might be a temporary issue. Please try again later.</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // If there's no data at all, show a message
+  if (!data) {
+    return (
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle>No insights available</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>There is not enough data to generate insights yet. Add more users and departments to get AI-powered recommendations.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+  
+  // Extract data from response with fallbacks for any missing properties
+  const { 
+    department_clusters = [], 
+    inactive_user_data = [], 
+    verification_stats = [], 
+    ai_recommendations = "",
+    error: errorMessage = null 
+  } = data.insights || {};
+  
+  // If we received an error in the insights object, display a notice but continue with the available data
+  const isUsingDemoData = errorMessage ? true : false;
+  
+  return (
+    <div className="space-y-6 animate__animated animate__fadeIn">
+      {/* Demo Data Warning */}
+      {isUsingDemoData && (
+        <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-4 animate__animated animate__fadeIn">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <FaLightbulb className="h-5 w-5 text-amber-500" />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-amber-800">Sample Data Displayed</h3>
+              <div className="mt-2 text-sm text-amber-700">
+                <p>We're showing example data because: {errorMessage}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Header with animation */}
+      <div className="flex items-center space-x-2 animate__animated animate__bounceIn">
+        <div className="h-10 w-10 bg-amber-100 rounded-full flex items-center justify-center">
+          <FaLightbulb className="h-6 w-6 text-amber-500" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold">AI Analytics Insights</h2>
+          <p className="text-gray-600">
+            Simple insights to help your college thrive - no complicated tech talk!
+          </p>
+        </div>
+      </div>
+      
+      <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid grid-cols-3">
+          <TabsTrigger value="overview" className="flex items-center gap-1">
+            <Home className="h-4 w-4" />
+            <span>Quick Summary</span>
+          </TabsTrigger>
+          <TabsTrigger value="departments" className="flex items-center gap-1">
+            <Building className="h-4 w-4" />
+            <span>Department Families</span>
+          </TabsTrigger>
+          <TabsTrigger value="recommendations" className="flex items-center gap-1">
+            <LightbulbIcon className="h-4 w-4" />
+            <span>Recommendations</span>
+          </TabsTrigger>
+        </TabsList>
+        
+        {/* Overview Tab */}
+        <TabsContent value="overview" className="pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Department Overview */}
+            <Card className="bg-blue-50 border-blue-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-blue-700 flex items-center gap-2">
+                    <Building2 className="h-5 w-5" />
+                    Your College Departments
+                  </CardTitle>
+                  <Badge variant="outline" className="bg-white text-blue-700">
+                    {department_clusters.length} Total
+                  </Badge>
+                </div>
+                <CardDescription className="text-blue-700/70">
+                  At a glance: who's in your college
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pb-2">
+                <div className="bg-white p-3 rounded-lg border border-blue-100 mb-3">
+                  <div className="flex items-start gap-2">
+                    <Info className="h-4 w-4 text-blue-600 mt-0.5" />
+                    <p className="text-xs text-blue-700">
+                      Colors below show which departments are in the same "family" - scroll down to "Department Families" tab to learn more!
+                    </p>
+                  </div>
+                </div>
+                
+                {department_clusters.map((dept) => (
+                  <div key={dept.department_id} className="flex items-center justify-between mb-3 p-2 bg-white rounded-lg border border-blue-100 hover:shadow-sm transition-shadow">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${getClusterColor(dept.cluster)}`} />
+                      <span className="font-medium">{dept.department_name}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center bg-blue-50 py-1 px-2 rounded-full">
+                        <Users className="h-3 w-3 text-blue-600 mr-1" />
+                        <span className="text-xs font-medium text-blue-700">{dept.metrics.student_count}</span>
+                      </div>
+                      <div className="flex items-center bg-green-50 py-1 px-2 rounded-full">
+                        <School className="h-3 w-3 text-green-600 mr-1" />
+                        <span className="text-xs font-medium text-green-700">{dept.metrics.faculty_count}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            
+            {/* Inactive Users */}
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-red-600 flex items-center gap-2">
+                    <UserX className="h-5 w-5" />
+                    Inactive Users
+                  </CardTitle>
+                  <Badge variant="outline" className="bg-red-50">
+                    {inactive_user_data.reduce((sum, item) => sum + item.count, 0)} Total
+                  </Badge>
+                </div>
+                <CardDescription>
+                  Users who are no longer active on the platform
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pb-2">
+                {inactive_user_data.length > 0 ? (
+                  inactive_user_data.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="capitalize">{item.role}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-sm text-gray-600">
+                          {item.department_name || "No Department"}: 
+                          <span className="font-medium text-red-600 ml-1">{item.count}</span>
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-600">No inactive users detected</p>
+                )}
+              </CardContent>
+            </Card>
+            
+            {/* Verification Stats */}
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-green-600 flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Verification Status
+                  </CardTitle>
+                </div>
+                <CardDescription>
+                  User verification status by role
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pb-2">
+                {verification_stats.map((stat, index) => (
+                  <div key={index} className="mb-3">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="capitalize font-medium">{stat.role}s</span>
+                      <span className="text-sm">
+                        <span className="text-amber-600">{stat.pending_count} pending</span> / 
+                        <span className="text-green-600 ml-1">{stat.verified_count} verified</span>
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-green-500 h-2 rounded-full" 
+                        style={{ 
+                          width: `${(stat.verified_count / (stat.total_count || 1)) * 100}%` 
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+            
+            {/* Top Recommendations Card */}
+            <Card className="bg-amber-50 border-amber-200">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-amber-700 flex items-center gap-2">
+                  <LightbulbIcon className="h-5 w-5" />
+                  Key Insights
+                </CardTitle>
+                <CardDescription className="text-amber-700/70">
+                  AI-powered recommendations for your platform
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pb-2">
+                {ai_recommendations ? (
+                  <div className="space-y-3">
+                    <div className="p-2 bg-white rounded-lg border border-amber-100 mb-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="h-6 w-6 rounded-full bg-amber-100 flex items-center justify-center">
+                            <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+                          </div>
+                          <h3 className="font-semibold text-amber-800">Top Priorities</h3>
+                        </div>
+                        <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
+                          <ClockIcon className="h-3 w-3 mr-1" />
+                          <span>Updated today</span>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2 pl-8">
+                        {ai_recommendations
+                          .split('\n')
+                          .filter(line => line.trim())
+                          .slice(0, 3)
+                          .map((line, index) => (
+                            <div key={index} className="relative">
+                              <div className="absolute left-[-20px] top-1 w-4 h-4 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 flex items-center justify-center">
+                                <span className="font-bold text-[10px] text-white">{index+1}</span>
+                              </div>
+                              <p className="text-sm text-amber-900">{line.trim()}</p>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center p-6 bg-white rounded-lg border border-amber-100">
+                    <div className="h-12 w-12 bg-amber-50 rounded-full flex items-center justify-center mb-3">
+                      <LightbulbIcon className="h-6 w-6 text-amber-400" />
+                    </div>
+                    <p className="text-amber-800 text-center font-medium">No insights available yet</p>
+                    <p className="text-xs text-amber-600/80 text-center mt-1">Add more users and departments to get AI-powered recommendations</p>
+                  </div>
+                )}
+              </CardContent>
+              <CardFooter>
+                <div className="flex items-center justify-between w-full">
+                  <p className="text-xs text-amber-700/70">
+                    <span className="inline-flex items-center">
+                      <BrainCircuit className="h-3 w-3 mr-1 text-amber-600" />
+                      AI-generated insights based on platform activity
+                    </span>
+                  </p>
+                  <Badge 
+                    variant="outline" 
+                    className="bg-white text-amber-700 hover:bg-amber-100 cursor-pointer transition-colors flex items-center gap-1" 
+                    onClick={() => setActiveTab('recommendations')}
+                  >
+                    <span>View All</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Badge>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+        </TabsContent>
+        
+        {/* Departments Tab */}
+        <TabsContent value="departments" className="pt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-blue-600" />
+                Department Family Groups
+              </CardTitle>
+              <CardDescription>
+                Departments with similar characteristics are grouped into "families" - this helps you spot trends and make better decisions
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* Cluster Groups */}
+              <div className="space-y-6">
+                {/* Create a section for each department group */}
+                {Array.from(new Set(department_clusters.map(d => d.cluster))).map(clusterId => {
+                  const clusterDepartments = department_clusters.filter(d => d.cluster === clusterId);
+                  // Get group name from the first department in this cluster (they all have the same group name)
+                  const groupName = clusterDepartments[0]?.group_name || `Group ${clusterId + 1}`;
+                  return (
+                    <div key={clusterId} className="border rounded-lg p-4">
+                      <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+                        <div className={`w-4 h-4 rounded-full ${getClusterColor(clusterId)}`} />
+                        <span className="animate__animated animate__fadeIn">{groupName}</span>
+                        <Badge variant="outline" className="ml-2 bg-white">{clusterDepartments.length} Departments</Badge>
+                      </h3>
+                      <div className="bg-blue-50 p-3 mb-4 rounded-lg border border-blue-100 text-blue-700">
+                        <div className="flex items-start gap-2">
+                          <Sparkles className="h-5 w-5 text-blue-600 mt-0.5 animate__animated animate__bounceIn" />
+                          <p className="text-sm">
+                            <strong>What this means:</strong> Departments in this family share similar patterns in student enrollment, activity, and verification status. 
+                            This helps you identify which departments might benefit from similar management approaches.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {clusterDepartments.map(dept => (
+                          <div key={dept.department_id} className="border rounded p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
+                            <h4 className="font-medium mb-3 text-lg flex items-center gap-2">
+                              <Building2 className="h-5 w-5 text-blue-500" />
+                              {dept.department_name}
+                            </h4>
+                            
+                            <div className="grid grid-cols-1 gap-y-3 text-sm">
+                              <div className="bg-blue-50 rounded-lg p-2 border border-blue-100 flex justify-between">
+                                <div className="flex items-center gap-1">
+                                  <Users className="h-4 w-4 text-blue-500" />
+                                  <span className="font-semibold">{dept.metrics.student_count} Students</span>
+                                </div>
+                                <div>
+                                  <Badge variant="outline" className="bg-white text-blue-700">
+                                    {dept.metrics.student_count > 20 ? 'Large Class' : dept.metrics.student_count > 10 ? 'Medium Class' : 'Small Class'}
+                                  </Badge>
+                                </div>
+                              </div>
+                              
+                              <div className="bg-green-50 rounded-lg p-2 border border-green-100 flex justify-between">
+                                <div className="flex items-center gap-1">
+                                  <School className="h-4 w-4 text-green-500" />
+                                  <span className="font-semibold">{dept.metrics.faculty_count} Faculty</span>
+                                </div>
+                                <div>
+                                  <Badge variant="outline" className="bg-white text-green-700">
+                                    {dept.metrics.student_count / Math.max(1, dept.metrics.faculty_count) > 10 
+                                      ? 'High Student/Faculty Ratio' 
+                                      : 'Good Student/Faculty Ratio'}
+                                  </Badge>
+                                </div>
+                              </div>
+                              
+                              <div className="bg-red-50 rounded-lg p-2 border border-red-100 flex justify-between">
+                                <div className="flex items-center gap-1">
+                                  <UserX className="h-4 w-4 text-red-500" />
+                                  <span className="font-semibold">{dept.metrics.inactive_users} Inactive</span>
+                                </div>
+                                <div>
+                                  <Badge variant="outline" className={`bg-white ${dept.metrics.inactive_users > 5 ? 'text-red-700' : 'text-green-700'}`}>
+                                    {dept.metrics.inactive_users > 5 ? 'Needs Attention' : 'Good Activity'}
+                                  </Badge>
+                                </div>
+                              </div>
+                              
+                              <div className="bg-amber-50 rounded-lg p-2 border border-amber-100 flex justify-between">
+                                <div className="flex items-center gap-1">
+                                  <CheckCircle className="h-4 w-4 text-amber-500" />
+                                  <span className="font-semibold">{dept.metrics.pending_verifications} Pending</span>
+                                </div>
+                                <div>
+                                  <Badge variant="outline" className={`bg-white ${dept.metrics.pending_verifications > 3 ? 'text-amber-700' : 'text-green-700'}`}>
+                                    {dept.metrics.pending_verifications > 3 ? 'Verification Backlog' : 'Up to Date'}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        {/* Recommendations Tab */}
+        <TabsContent value="recommendations" className="pt-4">
+          <Card>
+            <CardHeader className="bg-amber-50 border-b border-amber-100">
+              <CardTitle className="text-amber-700 flex items-center gap-2">
+                <LightbulbIcon className="h-5 w-5" />
+                AI-Powered Recommendations
+              </CardTitle>
+              <CardDescription className="text-amber-700/70">
+                Simple, practical steps to help your college succeed - updated automatically based on your data
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="py-6">
+              {ai_recommendations ? (
+                <div>
+                  {(() => {
+                    // Parse the AI recommendations markdown into sections
+                    const sections: SectionsData = {
+                      order: []
+                    };
+                    
+                    const parseRecommendationsSections = () => {
+                      let currentSection = '';
+                      
+                      ai_recommendations.split('\n').forEach(line => {
+                        const trimmedLine = line.trim();
+                        
+                        // Check if this is a header line (e.g. # Department Suggestions)
+                        if (trimmedLine.startsWith('# ')) {
+                          currentSection = trimmedLine.replace('# ', '');
+                          sections[currentSection] = [];
+                          sections.order.push(currentSection);
+                        } 
+                        // Check if this is a bullet point in a section
+                        else if (trimmedLine.startsWith('- ') && currentSection) {
+                          const content = trimmedLine.replace('- ', '');
+                          const existingContent = sections[currentSection] as string[];
+                          existingContent.push(content);
+                        }
+                      });
+                      
+                      // Convert all content arrays to section info objects with appropriate colors
+                      sections.order.forEach(sectionKey => {
+                        const content = sections[sectionKey] as string[];
+                        sections[sectionKey] = {
+                          title: sectionKey,
+                          content,
+                          icon: getHeadingIcon(sectionKey),
+                          color: getHeadingColor(sectionKey)
+                        };
+                      });
+                    };
+                    
+                    const getHeadingColor = (title: string): SectionColor => {
+                      if (title.toLowerCase().includes('student')) {
+                        return {
+                          bg: 'bg-indigo-50',
+                          text: 'text-indigo-700',
+                          bullet: 'bg-indigo-500'
+                        };
+                      } else if (title.toLowerCase().includes('faculty')) {
+                        return {
+                          bg: 'bg-purple-50',
+                          text: 'text-purple-700',
+                          bullet: 'bg-purple-500'
+                        };
+                      } else if (title.toLowerCase().includes('department')) {
+                        return {
+                          bg: 'bg-blue-50',
+                          text: 'text-blue-700',
+                          bullet: 'bg-blue-500'
+                        };
+                      } else {
+                        return {
+                          bg: 'bg-amber-50',
+                          text: 'text-amber-700',
+                          bullet: 'bg-amber-500'
+                        };
+                      };
+                    }
+                    
+                    const getHeadingIcon = (title: string): ReactNode => {
+                      if (title.toLowerCase().includes('student')) {
+                        return <GraduationCap className="h-5 w-5" />;
+                      } else if (title.toLowerCase().includes('faculty')) {
+                        return <School className="h-5 w-5" />;
+                      } else if (title.toLowerCase().includes('department')) {
+                        return <Building2 className="h-5 w-5" />;
+                      } else {
+                        return <Sparkles className="h-5 w-5" />;
+                      };
+                    }
+                    
+                    // Parse the recommendations into sections
+                    parseRecommendationsSections();
+                    
+                    // Create state for each section's filter
+                    const [filterStates, setFilterStates] = useState(
+                      Object.fromEntries(sections.order.map(key => [key, 'all']))
+                    );
+                    
+                    // Render each section
+                    return sections.order.map(sectionKey => {
+                      const section = sections[sectionKey] as SectionInfo;
+                      // Get filter for this section
+                      const activeFilter = filterStates[sectionKey] || 'all';
+                      
+                      // Update filter handler
+                      const updateFilter = (filter: string) => {
+                        setFilterStates(prev => ({
+                          ...prev,
+                          [sectionKey]: filter
+                        }));
+                      };
+                      
+                      // Get category for an item
+                      const getItemCategory = (index: number) => {
+                        return index % 3 === 0 ? 'quick' : index % 3 === 1 ? 'medium' : 'high';
+                      };
+                      
+                      // Filter content based on active filter
+                      const filteredContent = section.content.filter((_, i) => {
+                        if (activeFilter === 'all') return true;
+                        const category = getItemCategory(i);
+                        return category === activeFilter;
+                      });
+                      
+                      return (
+                        <div key={sectionKey} className={`p-6 border-2 rounded-lg shadow-lg mb-6 ${section.color.bg}`}>
+                          <div className="mb-5 pb-3 border-b border-amber-200">
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${section.color.text.replace('text-', 'bg-').replace('700', '100')}`}>
+                                {section.icon}
+                              </div>
+                              <h3 className={`text-xl font-bold ${section.color.text}`}>
+                                {section.title}
+                              </h3>
+                            </div>
+                            <p className="text-sm text-gray-600 ml-12">
+                              {section.title.toLowerCase().includes('student') ? 
+                                'Simple steps to help your students succeed' : 
+                              section.title.toLowerCase().includes('faculty') ?
+                                'Easy ways to support your teaching staff' :
+                              section.title.toLowerCase().includes('department') ?
+                                'Ideas to make your departments work better together' :
+                                'Important actions to improve your college'}
+                            </p>
+                          </div>
+                          
+                          {/* Category Navigation with filter functionality */}
+                          <div className="flex justify-between flex-wrap mb-4 gap-2">
+                            <Badge 
+                              variant={activeFilter === 'all' ? "secondary" : "outline"} 
+                              className={activeFilter === 'all' 
+                                ? `${section.color.text.replace('text-', 'bg-').replace('700', '600')} text-white hover:bg-opacity-90 cursor-pointer` 
+                                : "bg-white cursor-pointer hover:bg-gray-100"
+                              }
+                              onClick={() => updateFilter('all')}
+                            >
+                              All Actions ({section.content.length})
+                            </Badge>
+                            <div className="flex gap-2">
+                              <Badge 
+                                variant={activeFilter === 'quick' ? "secondary" : "outline"} 
+                                className={activeFilter === 'quick' 
+                                  ? `${section.color.text.replace('text-', 'bg-').replace('700', '600')} text-white hover:bg-opacity-90 cursor-pointer` 
+                                  : "bg-white cursor-pointer hover:bg-gray-100"
+                                }
+                                onClick={() => updateFilter('quick')}
+                              >
+                                Quick Wins
+                              </Badge>
+                              <Badge 
+                                variant={activeFilter === 'medium' ? "secondary" : "outline"} 
+                                className={activeFilter === 'medium' 
+                                  ? `${section.color.text.replace('text-', 'bg-').replace('700', '600')} text-white hover:bg-opacity-90 cursor-pointer` 
+                                  : "bg-white cursor-pointer hover:bg-gray-100"
+                                }
+                                onClick={() => updateFilter('medium')}
+                              >
+                                Medium Effort
+                              </Badge>
+                              <Badge 
+                                variant={activeFilter === 'high' ? "secondary" : "outline"} 
+                                className={activeFilter === 'high' 
+                                  ? `${section.color.text.replace('text-', 'bg-').replace('700', '600')} text-white hover:bg-opacity-90 cursor-pointer` 
+                                  : "bg-white cursor-pointer hover:bg-gray-100"
+                                }
+                                onClick={() => updateFilter('high')}
+                              >
+                                High Impact
+                              </Badge>
+                            </div>
+                          </div>
+                          
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {filteredContent.length > 0 ? (
+                              filteredContent.map((item, i) => {
+                                // Get the original index to maintain consistent styling
+                                const originalIndex = section.content.indexOf(item);
+                                return (
+                                  <li 
+                                    key={i} 
+                                    id={`recommendation-${sectionKey}-${originalIndex}`}
+                                    className="rounded-lg border-2 p-4 shadow bg-white recommendation-item animate__animated animate__fadeIn"
+                                  >
+                                    <div className="flex items-start gap-3">
+                                      <div className={`flex-shrink-0 w-8 h-8 rounded-full ${section.color.text.replace('text-', 'bg-').replace('700', '600')} flex items-center justify-center`}>
+                                        <span className="font-bold text-sm text-white">{originalIndex+1}</span>
+                                      </div>
+                                      <div className="space-y-2 flex-1">
+                                        <p className="text-gray-800 font-medium">{item}</p>
+                                        <div className="flex justify-between items-center border-t border-gray-100 pt-2 mt-2">
+                                          <Badge variant="outline" className={`${section.color.bg} ${section.color.text}`}>
+                                            {originalIndex % 3 === 0 ? 'Quick Win' : originalIndex % 3 === 1 ? 'Medium Effort' : 'High Impact'}
+                                          </Badge>
+                                          <button
+                                            className="inline-flex items-center text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded-full transition-colors cursor-pointer"
+                                            onClick={() => {
+                                              const element = document.getElementById(`recommendation-${sectionKey}-${originalIndex}`);
+                                              if (element) {
+                                                element.classList.add('recommendation-highlight');
+                                                element.classList.add(section.color.text.replace('text-', 'ring-'));
+                                                setTimeout(() => {
+                                                  element.classList.remove('recommendation-highlight');
+                                                  element.classList.remove(section.color.text.replace('text-', 'ring-'));
+                                                }, 2000);
+                                              }
+                                            }}
+                                          >
+                                            <ClockIcon className="h-3 w-3 mr-1" />
+                                            Try this: {originalIndex % 2 === 0 ? 'Today' : 'This week'}
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                );
+                              })
+                            ) : (
+                              <li className="col-span-2 p-6 text-center bg-white rounded-lg border-2">
+                                <p className="text-gray-500">No actions found in this category</p>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
+              ) : (
+                <p>No AI recommendations available at this time.</p>
+              )}
+            </CardContent>
+            <CardFooter className="bg-amber-50 border-t border-amber-100 p-4">
+              <div className="flex items-start gap-2">
+                <FaLightbulb className="h-5 w-5 text-amber-500 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-amber-700 mb-1">How to use these suggestions:</p>
+                  <ul className="text-xs text-amber-600 space-y-1 list-disc pl-4">
+                    <li>Pick one suggestion to try today</li>
+                    <li>Start with "Quick Win" items for immediate results</li>
+                    <li>The list updates automatically as your college grows</li>
+                    <li>No technical knowledge needed - just follow the steps!</li>
+                  </ul>
+                </div>
+              </div>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}

@@ -1,0 +1,11 @@
+email,student_id,first_name,last_name,department_name
+student1@example.com,ST100001,John,Doe,CSE
+student2@example.com,ST100002,Jane,Smith,IT
+student3@example.com,ST100003,Alex,Johnson,ECE
+student4@example.com,ST100004,Sarah,Williams,CIVIL
+student5@example.com,ST100005,Michael,Brown,MECH
+student6@example.com,ST100006,Emily,Davis,CSE
+student7@example.com,ST100007,Daniel,Miller,IT
+student8@example.com,ST100008,Jessica,Wilson,ECE
+student9@example.com,ST100009,David,Moore,CIVIL
+student10@example.com,ST100010,Olivia,Taylor,MECH

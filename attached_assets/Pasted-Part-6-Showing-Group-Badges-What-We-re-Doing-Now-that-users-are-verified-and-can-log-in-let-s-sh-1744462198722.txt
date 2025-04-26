@@ -1,0 +1,51 @@
+Part 6: Showing Group Badges
+What We’re Doing
+Now that users are verified and can log in, let’s show their groups (like “CSE” or “IT”) on the Home Page, like giving them a team badge. It builds on login from Part 1, with a spinning badge to make it fun.
+What We Need  
+A “departments” table in SQLite (id, name like “CSE”).  
+
+Add dept_id to “users” table for group links.  
+
+A /user-info endpoint to send role and dept_id to the Home Page after login.  
+
+A badge display with a “rotateIn” animation and a book icon.
+Who Can Do What  
+Students:  
+Can: Log in and see their group (e.g., “CSE”) on the Home Page.  
+
+Can’t: Change groups or manage users.  
+
+Understands: “Your group is CSE—ready to learn!”
+Faculty:  
+Can: Log in and see their group (e.g., “IT”).  
+
+Can’t: Edit groups or add users.  
+
+Understands: “Your group is IT—start teaching!”
+Admins:  
+Can: Log in, verify faculty, see their group (if assigned).  
+
+Can’t: Add groups yet—that’s coming!  
+
+Understands: “See groups to plan your work!”
+Tools Needed  
+Frontend: React.js (Next.js) for badge display, TailwindCSS for styling, Animate.css for “rotateIn” effect, FontAwesome for a book icon (fa-book).  
+
+Backend: FastAPI for /user-info, SQLite for queries.  
+
+Database: SQLite for “departments” and “users” tables.  
+
+AI Tools: None—just showing groups.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Design the “departments” table schema.  
+
+Update “users” table with dept_id.  
+
+Plan the /user-info endpoint for Home Page data.  
+
+Choose “rotateIn” animation and book icon for UX.
+Why It’s Cool
+The spinning badge makes users feel part of a team, connecting login to their Active Learn journey!
+

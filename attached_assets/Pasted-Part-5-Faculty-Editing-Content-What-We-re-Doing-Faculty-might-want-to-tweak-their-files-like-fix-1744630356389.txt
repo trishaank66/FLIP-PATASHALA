@@ -1,0 +1,51 @@
+Part 5: Faculty Editing Content
+What We’re Doing
+Faculty might want to tweak their files, like fixing a spelling mistake in a note. Let’s add “Edit” buttons to their content page from Part 4, so they can update files or details, with a light-up animation for clarity.
+What We Need 
+•	Add “Edit” buttons to the faculty content list for their uploads. 
+•	An /edit-content endpoint to update file details (e.g., filename, subject_faculty) or replace files. 
+•	Update the “content” table for edits. 
+•	A “lightSpeedIn” animation for buttons and a pencil icon.
+Who Can Do What 
+•	Students: 
+o	Can: Watch/download files. 
+o	Can’t: Edit or see faculty pages. 
+o	Understands: “Your files are getting better!”
+•	Faculty: 
+o	Can: Upload files, edit their own files’ details or content. 
+o	Can’t: Edit others’ files or manage users. 
+o	Understands: “Fix your notes with one click!”
+•	Admins: 
+o	Can: Log in (controls later). 
+o	Can’t: Edit faculty content yet. 
+o	Understands: “Faculty are polishing their stuff!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the faculty page, TailwindCSS for styling, Animate.css for “lightSpeedIn” effect, FontAwesome for a pencil icon (fa-pencil-alt). 
+•	Backend: FastAPI for /edit-content, SQLite for updates. 
+•	Database: SQLite for “content” table. 
+•	Storage: SQLite BLOB/filesystem for file updates. 
+•	AI Tools: None—just editing. 
+•	Tech Stack Rule: Use only these tools. Any changes need my approval first.
+Strict Mandate for Replit AI
+Dear Replit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Add “Edit” buttons to the faculty content list. 
+2.	Plan the /edit-content endpoint for updates. 
+3.	Update “content” table for edits. 
+4.	Choose “lightSpeedIn” animation and pencil icon for UX. 
+5.	Ensure high-end CSS, alignment, colors, icons, and spacing—delightful for all users, even kids.
+UX Mandate
+All pages must have proper styling, alignment, structure, high-end animations (used sparingly), good colors, and FontAwesome icons. The UX should delight users, and even a child should understand it.
+Why It’s Cool
+The light-up buttons make editing simple, keeping faculty content fresh for my dissertation!
+
+
+
+1.	let us start part <5> . of CONTENT MANAGEMENT MODULE first prepare a plan which is single unified plan without subplans so your  plan should contain all those functionalities and all tools Technologies mentioned for that part. 
+2.	first provide a plan as mentioned and ask for approval before starting the implementation of that part
+3.	 implementation plan should contain REAL front end, back end , database, AI  tools simultaneously. 
+4.	If u change any technology tool in the plan mention the reason for change clearly and  must take my approval before implementation 
+5.	avoid redoing of work always check what has be done so far 
+6.	avoid mentioning of any timelines or durations in the plan.
+7.	Use a table to show which tool has been used and any replacement mention  it with reason
+8.	avoid redoing of work always check what has be done so far

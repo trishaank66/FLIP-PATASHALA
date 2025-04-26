@@ -1,0 +1,49 @@
+Part 4: Verifying Faculty Sign-Ups
+What We’re Doing
+Faculty need admin approval to join, like getting a backstage pass. Let’s let admins verify faculty IDs from Part 2, so teachers can log in. A dashboard button will bounce to make approval fun.
+What We Need  
+A /verify-faculty endpoint for admins to approve faculty IDs (e.g., “F001”).  
+
+Update “users” table to set verification_pending=false for approved faculty.  
+
+An admin dashboard with a “Verify Faculty” button, “bounce” animation, and a user-check icon.
+Who Can Do What  
+Students:  
+Can: Log in if verified, see their group (coming soon).  
+
+Can’t: Verify faculty or access admin tools.  
+
+Understands: “You’re all set—start learning!”
+Faculty:  
+Can: Sign up and see “Approved!” once admin verifies, then log in.  
+
+Can’t: Approve themselves or manage users.  
+
+Understands: “Admin says you’re good to teach!”
+Admins:  
+Can: Log in (if verified), approve faculty IDs via dashboard.  
+
+Can’t: Approve admins yet—that’s next.  
+
+Understands: “Check faculty IDs to build your team!”
+Tools Needed  
+Frontend: React.js (Next.js) for the dashboard, TailwindCSS for design, Animate.css for “bounce” effect, FontAwesome for a user-check icon (fa-user-check).  
+
+Backend: FastAPI for /verify-faculty, SQLite for updates.  
+
+Database: SQLite to update “users” table.  
+
+AI Tools: None—just manual approval.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Design a dashboard section for faculty verification.  
+
+Plan the /verify-faculty endpoint for admin approval.  
+
+Update “users” table schema for faculty status.  
+
+Select “bounce” animation and user-check icon for UX.
+Why It’s Cool
+The bouncy button makes approving faculty feel like a party, ensuring only real teachers join!
+

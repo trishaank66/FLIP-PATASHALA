@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270">
+      <rect width="480" height="270" fill="#ec4899" rx="8" ry="8"/>
+      <g transform="translate(180, 95)">
+        <circle cx="60" cy="40" r="40" fill="rgba(255, 255, 255, 0.2)"/>
+        <g transform="translate(40, 20) scale(2)">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 15H5V5h5v13zm9 0h-5V5h5v13z" fill="white"/>
+        </g>
+      </g>
+      <text x="240" y="220" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">Ppt</text>
+    </svg>

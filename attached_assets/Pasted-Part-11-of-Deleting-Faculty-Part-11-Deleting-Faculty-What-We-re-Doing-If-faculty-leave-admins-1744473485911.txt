@@ -1,0 +1,47 @@
+Part 11  of Deleting Faculty 
+Part 11: Deleting Faculty
+What We’re Doing
+If faculty leave, admins need to update the list, like clearing a stage. Let’s add a “Delete Faculty” button to the dashboard from Part 10, logging it, to keep admin controls flowing smoothly.
+What We Need 
+•	A /delete-faculty endpoint to mark faculty as inactive in “users”. 
+•	Log deletions in “audit_log” (e.g., “Admin removed Dr. Gupta”). 
+•	A “Delete Faculty” button with a “slideInLeft” animation and a user-minus icon.
+Who Can Do What 
+•	Students: 
+o	Can: Log in, see their group. 
+o	Can’t: Delete faculty or see the dashboard. 
+o	Understands: “Your classes are up to date!”
+•	Faculty: 
+o	Can: Log in if not deleted, see their group. 
+o	Can’t: Delete others or use admin tools. 
+o	Understands: “Team updates keep things smooth!”
+•	Admins: 
+o	Can: Log in, sync/add/delete students, add/delete faculty, verify faculty. 
+o	Can’t: Add groups yet—coming up! 
+o	Understands: “Remove faculty to keep your list clean!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the dashboard, TailwindCSS for style, Animate.css for “slideInLeft” effect, FontAwesome for a user-minus icon (fa-user-minus). 
+•	Backend: FastAPI for /delete-faculty, SQLite for updates. 
+•	Database: SQLite for “users” and “audit_log”. 
+•	AI Tools: None—just managing faculty.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Plan the /delete-faculty endpoint logic. 
+2.	Ensure “audit_log” captures deletions. 
+3.	Update “users” table for inactive faculty. 
+4.	Choose “slideInLeft” animation and user-minus icon for UX.
+Why It’s Cool
+The sliding button keeps the system neat, flowing from faculty additions!
+
+let us start part <11> . of the user <authentication module> .first prepare a plan  which single unified plan without subplans which contains all real tools api's frameworks as mentioned in that “part”information. so you are plan should contain all those functionalities and all tools Technologies mention for that part. first provide a plan as mentioned and ask for approval before starting the implementation of that part.scrictly confine to given technologies,tool,apis given in the prompt above
+
+
+implementation plan should contain REAL front end, back end , database, AI  tools simultaneously
+
+Tools Needed 
+•	Frontend: React.js (Next.js) for the dashboard, TailwindCSS for style, Animate.css for “slideInLeft” effect, FontAwesome for a user-minus icon (fa-user-minus). 
+•	Backend: FastAPI for /delete-faculty, SQLite for updates. 
+•	Database: SQLite for “users” and “audit_log”. 
+•	AI Tools: None—just managing faculty.
+USE THE SAME TOOLS AS MENTIONED ABOVE IN PLANNAING AND IMPLEMENATION

@@ -1,0 +1,64 @@
+mplementation Plan for Part 9: Deleting Students
+Overview
+This plan outlines the implementation of a student deletion feature for the Active Learn platform's User Authentication Module, including audit logging, animations, and proper access controls.
+
+Database Implementation
+Add audit_log Table to Schema
+
+Create audit_logs table in the PostgreSQL database with:
+id: Auto-increment primary key
+action: Text field for deletion records
+user_id: Foreign key referencing users table
+performed_by: Foreign key referencing admin user
+timestamp: Datetime field for audit record creation
+details: JSON field for additional context
+Update Users Table Schema
+
+Add is_active boolean field (default true) to the existing users table to mark deleted students instead of permanently removing them
+Backend Implementation
+Create Delete Student API Endpoint
+
+Implement /api/delete-student endpoint in Express.js
+Secure with admin middleware to prevent unauthorized access
+Accept student ID in request body
+Update user record to set is_active = false
+Create audit log entry recording deletion action
+Return success/failure response with appropriate status code
+Update Authentication Flow
+
+Modify existing login authentication to reject inactive users
+Add logic to isAuthenticated middleware to check active status
+Frontend Implementation
+Admin Dashboard Enhancement
+
+Add delete button with trash icon to student entries in admin dashboard
+Implement confirmation dialog to prevent accidental deletions
+Add visual indication for inactive/deleted students in listings
+UI/UX Components
+
+Create DeleteStudentButton component with zoomIn animation using Animate.css
+Implement DeleteConfirmationDialog for safe deletion confirmation
+Add trash icon from react-icons (as FontAwesome alternative)
+Design success/error notifications for deletion operations
+State Management
+
+Update user queries to reflect student deletion status
+Invalidate relevant queries after deletion to refresh UI
+Add deleted status badge to student listings
+Testing Plan
+End-to-End Testing
+
+Test deletion flow as admin user
+Verify deleted students cannot log in
+Confirm audit logs are properly created
+Access Control Testing
+
+Verify only admins can delete students
+Ensure faculty cannot access deletion functionality
+Implementation Tools
+Frontend: React.js with TailwindCSS, Animate.css for zoomIn animation, react-icons for trash icon
+Backend: Express.js with PostgreSQL for data storage
+Database: PostgreSQL with Drizzle ORM for database operations
+Animation: Animate.css for zoomIn effect on the trash icon
+State Management: TanStack Query for data fetching and cache invalidation
+Would you like me to proceed with this implementation plan for Part 9 of the User Authentication Module?

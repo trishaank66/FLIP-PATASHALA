@@ -1,0 +1,59 @@
+Part 1: Showing Content to Students
+What We’re Doing
+Let’s kick off by letting students see a list of videos, notes, and slideshows for their group (like “CSE”), like opening a treasure chest of learning! This is a new CM feature, using UA’s dept_id to filter content. The Home Page’s “Content” tile will lead to a student page, fading in with a play icon to spark excitement.
+What We Need  
+A student content page linked from the Home Page’s “Content” tile, listing files (e.g., “Video1.mp4”).  
+
+A SQLite “content” table (id, subject_faculty, type, filename, url, uploaded_by, dept_id).  
+
+A /get-content endpoint to fetch files based on UA’s /user-info dept_id.  
+
+A “fadeIn” animation for the list and a FontAwesome play icon.
+Who Can Do What  
+Students:  
+Can: Click “Content” on the Home Page, see files for their group (e.g., “CSE - Faculty A”).  
+
+Can’t: Add or edit files—just view the list.  
+
+Understands: “Here’s your learning stuff—dive in!”
+Faculty:  
+Can: Log in (upload features coming soon).  
+
+Can’t: See student content lists or manage files yet.  
+
+Understands: “You’ll share your files soon!”
+Admins:  
+Can: Log in (controls later).  
+
+Can’t: Manage content lists yet—stay tuned!  
+
+Understands: “You’ll organize all files later!”
+Tools Needed  
+Frontend: React.js (Next.js) for the student page, TailwindCSS for blue (#1877F2) and white (#FFFFFF) theme, Animate.css for “fadeIn” effect, FontAwesome for a play icon (fa-play).  
+
+Backend: FastAPI for /get-content, SQLite for queries.  
+
+Database: SQLite for new “content” table, uses UA’s “users” for dept_id.  
+
+Storage: SQLite BLOB/filesystem for file URLs.  
+
+AI Tools: None—just displaying content.  
+
+Tech Stack Rule: Use only these tools. Any changes need my approval first.
+Strict Mandate for Replit AI
+Dear Replit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Design the student content page with a clean file list.  
+
+Plan the “content” table schema for CM.  
+
+Outline the /get-content endpoint, integrating UA’s /user-info for dept_id.  
+
+Select “fadeIn” animation and play icon for a welcoming UX.  
+
+Ensure high-end CSS, alignment, colors, icons, and spacing—delightful for all users, even kids.
+UX Mandate
+All pages must have proper styling, alignment, structure, high-end animations (used sparingly, only where needed), good colors, and FontAwesome icons. The UX should delight users, and even a child should understand it.
+Why It’s Cool
+The fading list feels like unveiling a gift, making students eager to explore Flipped Patashala’s content for my dissertation!
+

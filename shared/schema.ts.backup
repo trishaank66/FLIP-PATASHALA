@@ -1,0 +1,172 @@
+import { pgTable, text, serial, integer, boolean, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
+
+// Departments table for group badges
+export const departments = pgTable("departments", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  created_at: timestamp("created_at").notNull().defaultNow()
+});
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+  role: text("role").notNull().default("student"),
+  role_id: text("role_id"),  // For student ID, faculty ID, or admin code
+  first_name: text("first_name"),  // User's first name
+  last_name: text("last_name"),    // User's last name
+  department_id: integer("department_id").references(() => departments.id), // Foreign key to departments
+  verification_pending: boolean("verification_pending").notNull().default(true),
+  verified_at: timestamp("verified_at"),  // Timestamp when verification happened
+  is_active: boolean("is_active").notNull().default(true) // Flag to mark if user is active or deleted
+});
+
+// Table for tracking verification attempts
+export const verificationLogs = pgTable("verification_logs", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").notNull().references(() => users.id),
+  status: text("status").notNull(), // 'pending', 'verified', 'rejected'
+  message: text("message"),
+  created_at: timestamp("created_at").notNull().defaultNow()
+});
+
+// Table for audit logs to track user actions (like deletions)
+export const auditLogs = pgTable("audit_logs", {
+  id: serial("id").primaryKey(),
+  action: text("action").notNull(), // e.g., 'delete_student'
+  user_id: integer("user_id").notNull().references(() => users.id), // User affected
+  performed_by: integer("performed_by").notNull().references(() => users.id), // Admin who performed the action
+  details: jsonb("details"), // Additional context as JSON
+  created_at: timestamp("created_at").notNull().defaultNow()
+});
+
+// Content Management Module tables
+export const content = pgTable("content", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  faculty: varchar("faculty", { length: 255 }),
+  type: varchar("type", { length: 50 }).notNull(), // video, note, slideshow
+  filename: varchar("filename", { length: 255 }).notNull(),
+  url: varchar("url", { length: 255 }).notNull(),
+  views: integer("views").notNull().default(0), // Track how many times content has been viewed
+  downloads: integer("downloads").notNull().default(0), // Track how many times content has been downloaded
+  uploaded_by: integer("uploaded_by").references(() => users.id),
+  dept_id: integer("dept_id").references(() => departments.id),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow()
+});
+
+// Define explicit relations between tables
+export const departmentsRelations = relations(departments, ({ many }) => ({
+  users: many(users),
+  content: many(content)
+}));
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  department: one(departments, {
+    fields: [users.department_id],
+    references: [departments.id],
+  }),
+  uploadedContent: many(content)
+}));
+
+export const contentRelations = relations(content, ({ one }) => ({
+  department: one(departments, {
+    fields: [content.dept_id],
+    references: [departments.id],
+  }),
+  uploader: one(users, {
+    fields: [content.uploaded_by],
+    references: [users.id],
+  })
+}));
+
+// Department schemas
+export const insertDepartmentSchema = createInsertSchema(departments).pick({
+  name: true,
+  description: true,
+});
+
+export const updateUserDepartmentSchema = z.object({
+  department_id: z.number().nullable(),
+});
+
+// User schemas
+export const insertUserSchema = createInsertSchema(users).pick({
+  email: true,
+  password: true,
+  role: true,
+  role_id: true,
+  verification_pending: true,
+  first_name: true,
+  last_name: true,
+}).extend({
+  department_id: z.number().optional().nullable(),
+  verified_at: z.date().optional(),
+  is_active: z.boolean().optional().default(true),
+});
+
+export const loginUserSchema = createInsertSchema(users).pick({
+  email: true,
+  password: true,
+});
+
+// Schema for verification logs
+export const insertVerificationLogSchema = createInsertSchema(verificationLogs).pick({
+  user_id: true,
+  status: true,
+  message: true,
+});
+
+// Schema for audit logs
+export const insertAuditLogSchema = createInsertSchema(auditLogs).pick({
+  action: true,
+  user_id: true,
+  performed_by: true,
+}).extend({
+  details: z.record(z.any()).optional(),
+});
+
+// Content schemas
+export const insertContentSchema = createInsertSchema(content).pick({
+  title: true,
+  description: true,
+  subject: true,
+  faculty: true,
+  type: true,
+  filename: true,
+  url: true,
+  uploaded_by: true,
+  dept_id: true
+});
+
+// Type definitions
+export type InsertDepartment = z.infer<typeof insertDepartmentSchema>;
+export type UpdateUserDepartment = z.infer<typeof updateUserDepartmentSchema>;
+export type Department = typeof departments.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
+export type LoginUser = z.infer<typeof loginUserSchema>;
+export type User = typeof users.$inferSelect;
+export type InsertVerificationLog = z.infer<typeof insertVerificationLogSchema>;
+export type VerificationLog = typeof verificationLogs.$inferSelect;
+export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertContent = z.infer<typeof insertContentSchema>;
+export type Content = typeof content.$inferSelect;
+
+// Type for user with department
+export type UserWithDepartment = User & {
+  department?: Department | null;
+};
+
+// Type for content with related data
+export type ContentWithRelations = Content & {
+  department?: Department;
+  uploader?: User;
+};

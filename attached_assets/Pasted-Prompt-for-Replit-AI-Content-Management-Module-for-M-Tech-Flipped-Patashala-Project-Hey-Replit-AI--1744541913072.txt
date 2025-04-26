@@ -1,0 +1,29 @@
+Prompt for Replit AI: Content Management Module for M.Tech Flipped Patashala Project
+Hey Replit AI, Let’s Create an Awesome Content Library for My Dissertation!
+Hi Replit AI! I’m working on my M.Tech dissertation at BITS Pilani, building Flipped Patashala—a platform where students dive into videos and notes, faculty share their expertise, and admins keep everything tidy. We’ve already nailed the Home Page and User Authentication (UA) Module, so users can log in, register, and see their groups (like “CSE”). Now, we need a Content Management (CM) Module to be a super-smart library for learning goodies, like a magic bookshelf anyone can explore! This is a planning phase—no coding yet, just sketching out a clear map for my project, like planning a fun trip. We want it simple, secure, and bursting with cool visuals to make users smile—even a kid should love it! We’ll stick to the exact tools listed, use a mocked Claude API (unless I share a real key), and never redo what’s already in UA (like syncing students). Let’s break it into 15 parts, each adding a piece that flows naturally, so clear anyone can follow. Ready to make this module a star for Flipped Patashala?
+Tools We’ll Use (Every Part)  
+Frontend: React.js (Next.js) for friendly pages, TailwindCSS for vibrant colors (#1877F2, #FFFFFF, #000000), Animate.css for professional animations, FontAwesome for clear icons.  
+
+Backend: Python with FastAPI for snappy responses (like “here’s your file!”).  
+
+Database: SQLite for content and user data (leveraging UA’s “users” table).  
+
+Storage: SQLite BLOB or filesystem for files (free, max 50MB).  
+
+AI Tools:  
+Python rule-based AI for tag suggestions (simple if-then, no ML).  
+
+Pandas for CSV processing (enrollment sync, built on UA).  
+
+Claude API (mocked for tags—ask me for a real key if needed).
+Big Rules:  
+This is a plan—don’t build yet!  
+
+Stick to the listed tech stack. Any changes need my approval first.  
+
+Use professional animations only where needed—clean, appealing, not overdone.  
+
+Make every page stunning with high-end CSS, perfect alignment, great colors, icons, and spacing—users should be thrilled, and even a child should get it!  
+
+Avoid redoing UA features (e.g., student sync, faculty add)—enhance or integrate them for CM
+

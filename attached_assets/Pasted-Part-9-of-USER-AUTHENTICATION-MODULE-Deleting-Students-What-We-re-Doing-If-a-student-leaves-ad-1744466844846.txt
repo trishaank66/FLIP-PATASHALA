@@ -1,0 +1,39 @@
+Part 9 of USER AUTHENTICATION MODULE : Deleting Students 
+What We’re Doing
+If a student leaves, admins need to tidy up, like clearing a desk. Let’s add a “Delete Student” button to the dashboard from Part 8 to remove students, logging it for records. A trash icon will zoom in to signal action.
+What We Need 
+•	A /delete-student endpoint to mark students as inactive in “users”. 
+•	An “audit_log” table (id, action, user_id) to record deletions. 
+•	A “Delete Student” button with a “zoomIn” animation and a trash icon.
+Who Can Do What 
+•	Students: 
+o	Can: Log in if not deleted, see their group. 
+o	Can’t: Delete anyone or see the dashboard. 
+o	Understands: “Keep learning—you’re still here!”
+•	Faculty: 
+o	Can: Log in if verified, see their group. 
+o	Can’t: Delete students or use admin tools. 
+o	Understands: “Your class list is updated!”
+•	Admins: 
+o	Can: Log in, sync/add students, delete students. 
+o	Can’t: Add faculty yet—coming up! 
+o	Understands: “Remove students to keep things tidy!”
+Tools Needed 
+•	Frontend: React.js (Next.js) for the dashboard, TailwindCSS for style, Animate.css for “zoomIn” effect, FontAwesome for a trash icon (fa-trash). 
+•	Backend: FastAPI for /delete-student, SQLite for updates. 
+•	Database: SQLite for “users” and “audit_log” tables. 
+•	AI Tools: None—just cleaning up.
+Strict Mandate for Lovable AI
+Lovable AI must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step 
+1.	Design the “audit_log” table schema. 
+2.	Plan the /delete-student endpoint for safe deletion. 
+3.	Update “users” table for inactive status. 
+4.	Choose “zoomIn” animation and trash icon for UX.
+Why It’s Cool
+The zooming button makes tidying up bold, keeping the system neat after additions!
+
+
+
+let us start part <9> . of the user authentication module .first prepare a plan  which single unified plan without subplans which contains all real tools api's frameworks as mentioned in that “part”information. so you are plan should contain all those functionalities and all tools Technologies mention for that part. first provide a plan as mentioned and ask for approval before starting the implementation of that part
+implementation plan should contain REAL front end, back end , database, AI  tools simultaneously

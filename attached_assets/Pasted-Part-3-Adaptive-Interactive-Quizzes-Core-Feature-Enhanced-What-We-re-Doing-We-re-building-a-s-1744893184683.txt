@@ -1,0 +1,206 @@
+Part 3: Adaptive Interactive Quizzes (Core Feature, Enhanced)
+What We’re Doing:
+We’re building a smart quiz system for the Interactive Learning (IL) Module that automatically creates quizzes from lecture handouts (PDFs) stored in the Content Management (CM) module. These quizzes adjust to each student’s skill level (Easy, Medium, or Hard), so they’re just right—not too tough or too easy. When a faculty member uploads a PDF, they can choose to enable or disable a quiz for it, and only one quiz is made per handout. Faculty can publish or unpublish the quiz to control when students see it, test the quiz themselves without it counting in reports, and easily see which handouts have published or unpublished quizzes. Students get one attempt per quiz, with instant scores to help them learn faster. Everything is tied to the specific handout, so it’s clear and organized on both student and faculty dashboards.
+What We’re Achieving:  
+Automatic Quizzes: A quiz (8 multiple-choice questions, 4 True/False, 3 short-answer) is generated from a PDF’s content (e.g., a ‘Loops’ lecture) when enabled by faculty, saving time and effort.  
+
+Personalized Learning: Quizzes adapt to each student’s performance (e.g., Hard if they score >80%, Easy if <60%), keeping them engaged and challenged.  
+
+Clear Control for Faculty: Faculty can enable/disable quizzes on upload, publish/unpublish them later, and see at a glance which handouts have quizzes (published or not). They can also test quizzes without affecting student data.  
+
+One Attempt, One Quiz: Each handout has one quiz, and students get one try, ensuring focused learning and fair tracking.  
+
+Instant Feedback: Students see scores right away (e.g., ‘78% - Nice!’), eliminating delays and helping them review with linked CM handouts.  
+
+Seamless Integration: Quizzes connect to CM (via handouts) and UA (to identify users), showing up clearly in student dashboards and faculty content lists.
+Why It’s Cool:
+Imagine a quiz that feels like a game, perfectly matched to how well you’re doing, popping up with your score the moment you finish! For students, it’s fun, clear, and helps you learn better. For faculty, it’s like having a helper who creates quizzes, lets you test them, and shows you instantly how students are doing, so you can teach smarter. The system is super organized—every quiz is tied to its handout, and faculty can control what’s live with a single click. It’s fast, easy, and makes learning feel like an adventure!
+Value Addition:  
+Students: Quizzes fit your level, making learning fun (30% more engagement) and clear (20% better understanding). Instant scores mean no waiting, and links to handouts help you review. One attempt keeps you focused.  
+
+Faculty: Auto-generated quizzes save 40% of your planning time, and testing without analytics impact lets you perfect them. Clear publish/unpublish status and live scores give you 50% better insights into student needs.  
+
+System: With <200ms response times and 95% reliability, the quiz system supports 150+ students across 5+ departments, cutting tech glitches by 35% for a smooth experience.
+User Flow (How It Works):  
+Student Experience:  
+You log in (via UA) and land on the Home Page. Click the bright ‘Interactive’ button (#1877F2) to enter the IL Module.  
+
+On your dashboard, see a list of available quizzes tied to handouts (e.g., ‘Loops Lecture Quiz’). Only published quizzes show up.  
+
+Pick a quiz, and a spinning wheel (#1877F2) shows questions with the handout title (‘Loops Lecture’). Answer 8 MCQs, 4 True/False, and 3 short-answer questions.  
+
+Finish, and a score pops up instantly (‘78% - Nice!’) with a ‘fadeIn’ animation. You can’t retake the quiz—one try only!  
+
+Click ‘Review Handout’ to open the ‘Loops Lecture’ PDF in CM or see related videos/notes via tags (e.g., ‘Loops’).  
+
+If you scored 78%, the next quiz (for another handout) stays at Medium. Score >80%? It’s Hard next time. <60%? It’s Easy.  
+
+You feel challenged, clear, and excited to learn more, with no delays.
+Faculty Experience:  
+Log in, click ‘Interactive’, and go to your IL dashboard.  
+
+Upload a new PDF (‘Loops Lecture’) to CM. A prompt asks, “Enable quiz for this handout?” Choose ‘Yes’ or ‘No’.  
+If ‘Yes’, a quiz is auto-generated (stored as unpublished). If ‘No’, no quiz is made.
+In your ‘My Content’ list (linked to CM), see all handouts with labels: ‘Quiz Published’, ‘Quiz Unpublished’, or ‘No Quiz’.  
+
+For a handout with a quiz (e.g., ‘Loops Lecture’), click to preview the quiz, test it yourself (answers don’t count in analytics), and choose ‘Publish’ or ‘Unpublish’ with a #1877F2 button.  
+
+Published quizzes appear on student dashboards. Unpublish anytime to hide them.  
+
+View a live score dashboard (Chart.js) showing student results (e.g., ‘S001: 78%’).  
+
+You save time, know exactly which handouts have quizzes, and adjust teaching based on scores.
+Who Can Do What:  
+Students:  
+Can: Take published quizzes (one attempt per quiz), see instant scores, and review linked handouts or CM content via tags.  
+
+Cannot: Create, enable, publish, unpublish, or test quizzes, or take a quiz more than once.
+Faculty:  
+Can: Enable/disable quiz generation on PDF upload, publish/unpublish quizzes, test quizzes without affecting analytics, view live student scores, and see quiz status (published/unpublished/no quiz) for each handout.  
+
+Cannot: Take quizzes for credit, manually set quiz difficulty (it’s adaptive), or manage users.
+Admins:  
+Can: No access to quizzes; focus on user management (covered in later parts).  
+
+Cannot: Create, take, publish, or interact with quizzes.
+Cannot Do Across Roles: Students can’t manage quizzes; faculty can’t take quizzes or adjust difficulty; admins can’t access quiz features.
+Tools and Technologies:  
+Frontend:  
+React.js (Next.js): Builds the student quiz wheel and faculty quiz management interface.  
+
+Chart.js: Creates score visuals (e.g., bar charts for student results).  
+
+Animate.css: Adds professional ‘fadeIn’ for score pop-ups and ‘pulse’ for publish/unpublish buttons.
+Backend:  
+Python with FastAPI: Handles quiz generation, publishing, scoring, and testing endpoints.
+Database:  
+SQLite: Stores quiz data in the ‘quizzes’ table, linked to CM’s ‘content’ table.
+AI:  
+spaCy: Analyzes PDF text to generate 8 MCQs, 4 True/False, and 3 short-answer questions.  
+
+scikit-learn: Adapts quiz levels (Easy/Medium/Hard) based on student scores.  
+
+Claude API: Evaluates short-answer questions (ask for API key if needed; use rule-based fallback otherwise).
+Strict Mandate for Repplit AI: Dear Repplit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Tech Stack Enforcement: Use only React.js (Next.js), Chart.js, Animate.css, Python with FastAPI, SQLite, spaCy, scikit-learn, and Claude API. Any change to the tech stack requires my explicit approval before implementation.
+Step-by-Step Plan:  
+Database Setup:  
+Extend the ‘quizzes’ table in SQLite with:  
+Columns: id (primary key), subject_faculty (e.g., ‘CSE - Faculty A’), handout_id (links to CM’s ‘content’ table), questions (JSON with 8 MCQs, 4 True/False, 3 short-answer), level (Easy/Medium/Hard), tags (e.g., ‘Loops’), scores (JSON, e.g., {‘S001’: 78}), is_published (boolean, default False), attempts (JSON, e.g., {‘S001’: 1} to track one attempt).  
+
+Foreign key: Link handout_id to CM’s ‘content’ table.
+Add a ‘has_quiz’ boolean column to CM’s ‘content’ table to track if a handout has a quiz enabled.
+Quiz Generation Endpoint:  
+Create a /generate-quiz endpoint in FastAPI:  
+Triggered when a faculty uploads a PDF to CM and enables the quiz option (‘Yes’ on “Enable quiz?” prompt).  
+
+Use spaCy to extract key concepts (e.g., ‘Loops’) from the PDF and generate 8 MCQs, 4 True/False, and 3 short-answer questions.  
+
+Store the quiz in the ‘quizzes’ table (is_published=False, tags auto-generated) and set ‘has_quiz’=True in CM’s ‘content’ table.  
+
+If quiz is disabled (‘No’), set ‘has_quiz’=False and skip generation.  
+
+Ensure only one quiz per handout (check ‘has_quiz’ before generating).
+Publish/Unpublish Endpoint:  
+Create a /publish-quiz endpoint in FastAPI:  
+Faculty toggles is_published (True/False) to show/hide the quiz on student dashboards.  
+
+Link to handout_id for clear association.
+Faculty Quiz Testing Endpoint:  
+Create a /test-quiz endpoint in FastAPI:  
+Allows faculty to take a quiz for review without storing scores or attempts in analytics or the ‘quizzes’ table.  
+
+Returns temporary results for faculty to check question quality.
+Adaptive Quiz Delivery:  
+Create a /start-quiz endpoint in FastAPI:  
+Serve published quizzes (is_published=True) to students based on subject_faculty, user_id, and handout_id.  
+
+Use scikit-learn to set the level: Medium for first attempt; Hard (>80% on prior quiz); Easy (<60%).  
+
+Check ‘attempts’ JSON to enforce one attempt per student (e.g., if ‘S001’: 1, block retake).
+Auto-Evaluation:  
+Create an /evaluate-quiz endpoint in FastAPI:  
+Auto-score MCQs and True/False using predefined answers.  
+
+Use Claude API for short-answer evaluation (ask for API key; fallback to rule-based scoring if unavailable).  
+
+Store scores in ‘quizzes’ table (e.g., {‘S001’: 78}) and update ‘attempts’ (e.g., {‘S001’: 1}).
+Student Quiz UI:  
+Build in React.js:  
+Show a quiz list on the student dashboard, each tied to a handout (e.g., ‘Loops Lecture Quiz’).  
+
+Display a spinning quiz wheel (#1877F2) with the handout title, clear questions, and a progress bar.  
+
+Show instant scores in a Chart.js bar chart (‘78% - Nice!’) with a ‘fadeIn’ animation.  
+
+Add a ‘Review Handout’ button linking to the CM PDF and tags (e.g., ‘Loops’) linking to related content (e.g., videos).  
+
+Block retakes with a message (“You’ve already taken this quiz!”).
+Faculty Quiz UI:  
+Build in React.js:  
+In the ‘My Content’ list (linked to CM), show handouts with status: ‘Quiz Published’, ‘Quiz Unpublished’, or ‘No Quiz’.  
+
+For handouts with quizzes, offer ‘Preview/Test’, ‘Publish’, and ‘Unpublish’ buttons (#1877F2, ‘pulse’ animation).  
+
+Display a live score dashboard (Chart.js) with student results (e.g., ‘S001: 78%’).  
+
+Include tagged filters (e.g., ‘Loops’) for quiz organization.
+CM Integration:  
+Link quiz tags (e.g., ‘Loops’) to CM content (e.g., ‘Loops’ video/notes) for student review.  
+
+Use handout_id to tie quizzes to specific PDFs in CM’s ‘content’ table.
+Testing:  
+Faculty uploads ‘Loops Lecture’ PDF, enables quiz; a quiz is generated (unpublished, ‘has_quiz’=True).  
+
+Faculty tests the quiz; results don’t affect analytics.  
+
+Faculty publishes the quiz; S001 sees it on their dashboard, takes it (78%), can’t retake, and gets a Medium quiz next.  
+
+Faculty uploads another PDF, disables quiz (‘has_quiz’=False); no quiz is made.  
+
+Faculty unpublishes a quiz; it disappears from S001’s dashboard.  
+
+In ‘My Content’, faculty sees ‘Loops Lecture: Quiz Published’, ‘Arrays Lecture: No Quiz’.  
+
+Verify <200ms latency, real Claude API calls, and one quiz/attempt per handout.
+UX Design:  
+Student View: A vibrant quiz wheel (#1877F2) spins questions, showing the handout title (‘Loops Lecture’) and a progress bar. Scores pop up instantly (‘78% - Nice!’) with a ‘fadeIn’ animation in a Chart.js bar chart. A ‘Review Handout’ button links to CM, and tags (e.g., ‘Loops’) open related content. Use high-end CSS, clear icons, and proper spacing for a fun, child-friendly UX. If a quiz is taken, a friendly message (“You’ve already taken this quiz!”) appears.  
+
+Faculty View: A clean ‘My Content’ list shows handouts with quiz status (‘Quiz Published’, ‘Quiz Unpublished’, ‘No Quiz’) and tagged filters (e.g., ‘Loops’). ‘Preview/Test’, ‘Publish’, and ‘Unpublish’ buttons (#1877F2) have a subtle ‘pulse’ animation. A live score dashboard (Chart.js) shows student results. Ensure high-end CSS, intuitive icons, and spacing for a child-friendly UX.  
+
+Overall: Animations (‘fadeIn’ for scores, ‘pulse’ for buttons) are professional, used only where they add joy, keeping the interface simple, vibrant, and accessible, even to a child.
+Why It’s Valuable:  
+Students: Quizzes match your skill level, making learning fun (30% engagement boost) and clear (20% awareness lift). Instant scores eliminate waiting, one attempt keeps you focused, and handout links help you study smarter.  
+
+Faculty: Auto-generated quizzes save 40% planning time, and testing ensures quality without skewing data. Clear status indicators and publish/unpublish options give you control, while live scores offer 50% better insights to guide teaching.  
+
+System: Fast responses (<200ms), 95% reliability, and scalability for 150+ students reduce tech bottlenecks by 35%, ensuring a smooth, dependable experience.
+Repplit AI, Think Step-by-Step:  
+Update the SQLite schema (‘quizzes’ and ‘content’ tables) and verify CM linkage.  
+
+Build the /generate-quiz endpoint with spaCy, ensuring one quiz per handout.  
+
+Create the /publish-quiz and /test-quiz endpoints for faculty control.  
+
+Implement adaptive delivery with scikit-learn and one-attempt logic.  
+
+Develop the /evaluate-quiz endpoint with Claude API (or fallback).  
+
+Build the student UI (quiz wheel, scores, handout links) and faculty UI (‘My Content’, status, dashboard).  
+
+Test all scenarios (upload, enable/disable, publish/unpublish, test, student flow).  
+
+Verify <200ms latency, real API calls, and CM integration.
+If any step is unclear or fails, pause and clarify with me. Stick strictly to the specified tech stack (React.js, FastAPI, SQLite, spaCy, scikit-learn, Claude API); any proposed change requires my approval.
+Integration Notes:  
+Home Page: The ‘Interactive’ tile routes students to the quiz list and faculty to the quiz management view.  
+
+UA: Uses /user-info to fetch user_id, role, and subject_faculty for quiz access.  
+
+CM: Quizzes link to PDFs via handout_id and tags (e.g., ‘Loops’ quiz → ‘Loops’ video).  
+
+Future Modules: Quiz scores feed Performance Analytics (stub), and attempts contribute to Gamification (stub).
+Strict Mandate Reminder: Dear Repplit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Repplit AI, Your Call:
+This enhanced quiz system is clear, adaptive, and perfectly tied to handouts, with easy faculty controls and a fun student experience. It’s ready to make learning engaging and efficient in Flip Patashala. Ready to build it? If anything needs tweaking (e.g., fewer questions), let me know. Otherwise, go ahead and create this quiz magic!
+

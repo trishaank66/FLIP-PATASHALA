@@ -1,0 +1,582 @@
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth, LoginData, RegisterData } from "@/hooks/use-auth";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { z } from "zod";
+import { Eye, EyeOff, Loader2, CheckCircle2, AlertCircle, Building2, BookOpen, GraduationCap, School } from "lucide-react";
+import { useLocation } from "wouter";
+import { FaRegUser, FaUserTie, FaUserCog, FaIdCard } from "react-icons/fa";
+import { DeveloperTools } from "@/components/DeveloperTools";
+import { TestLoginButtons } from "@/components/TestLoginButtons";
+import "animate.css";
+
+// Login schema from useAuth
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  rememberMe: z.boolean().optional(),
+});
+
+// Register schema from useAuth with role_id
+const registerSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+  role: z.enum(["student", "faculty", "admin"]),
+  role_id: z.string().min(1, "ID is required"),
+  department_id: z.union([z.number(), z.string(), z.null()]).optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+})
+.refine((data) => {
+  // Only require department_id for faculty and student
+  if (data.role === "faculty" || data.role === "student") {
+    return Boolean(data.department_id);
+  }
+  return true;
+}, {
+  message: "Please select a department",
+  path: ["department_id"],
+});
+
+export default function AuthPage() {
+  const [location, navigate] = useLocation();
+  const { user, loginMutation, registerMutation, isLoading } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  
+  // Fetch departments for student/faculty registration
+  const { data: departments = [] } = useQuery({
+    queryKey: ["/api/departments"],
+    queryFn: async () => {
+      const response = await fetch("/api/departments");
+      if (!response.ok) throw new Error("Failed to fetch departments");
+      return response.json();
+    }
+  });
+  
+  // Redirect to home if user is already logged in and fully verified
+  useEffect(() => {
+    if (!isLoading) {
+      const params = new URLSearchParams(window.location.search);
+      const fromAdmin = params.get('from') === 'admin';
+      
+      if (user && !user.verification_pending) {
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else if (!fromAdmin) {
+          navigate('/home');
+        }
+      }
+    }
+  }, [isLoading, user, navigate]);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<"student" | "faculty" | "admin">("student");
+  const [roleIdPlaceholder, setRoleIdPlaceholder] = useState("S001");
+  const [registrationMessage, setRegistrationMessage] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  
+  // Login form
+  const loginForm = useForm<LoginData & { rememberMe?: boolean }>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false
+    },
+  });
+
+  // Register form
+  const registerForm = useForm<RegisterData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "student",
+      role_id: "",
+      department_id: null,
+    }
+  });
+
+  // Update role in register form when role changes
+  useEffect(() => {
+    registerForm.setValue("role", selectedRole);
+    
+    // Update role ID placeholder based on selected role
+    if (selectedRole === "student") {
+      setRoleIdPlaceholder("S001");
+    } else if (selectedRole === "faculty") {
+      setRoleIdPlaceholder("F001");
+    } else {
+      setRoleIdPlaceholder("ADMIN001");
+    }
+  }, [selectedRole, registerForm]);
+
+  // Removed redundant redirection effect as it's now handled directly in the login mutation
+
+  // Submit login form
+  const onLoginSubmit = (data: LoginData & { rememberMe?: boolean }) => {
+    const { rememberMe, ...loginData } = data;
+    loginMutation.mutate(loginData);
+  };
+
+  // Submit register form
+  const onRegisterSubmit = (data: RegisterData) => {
+    // Clear previous registration message
+    setRegistrationMessage("");
+    setRegistrationSuccess(false);
+    
+    // Add validation for role-specific ID format
+    let isValidId = true;
+    if (data.role === "student" && !data.role_id.startsWith("S")) {
+      registerForm.setError("role_id", { 
+        type: "manual", 
+        message: "Student ID must start with 'S' (e.g., S001)" 
+      });
+      isValidId = false;
+    } else if (data.role === "faculty" && !data.role_id.startsWith("F")) {
+      registerForm.setError("role_id", { 
+        type: "manual", 
+        message: "Faculty ID must start with 'F' (e.g., F001)" 
+      });
+      isValidId = false;
+    } else if (data.role === "admin" && !data.role_id.includes("ADMIN")) {
+      registerForm.setError("role_id", { 
+        type: "manual", 
+        message: "Admin code must include 'ADMIN' (e.g., ADMIN001)" 
+      });
+      isValidId = false;
+    }
+    
+    if (!isValidId) return;
+    
+    registerMutation.mutate(data, {
+      onSuccess: (response: any) => {
+        setRegistrationSuccess(true);
+        setRegistrationMessage("Account created successfully. Access request is to be verified by admin. This may take 1-3 days.");
+        registerForm.reset();
+      },
+      onError: (error: Error) => {
+        setRegistrationMessage(error.message);
+        setRegistrationSuccess(false);
+      }
+    });
+  };
+
+  // Role messages
+  const roleMessages = {
+    student: "Type your email and password to start learning!",
+    faculty: "Login to check your classes!",
+    admin: "Login to manage the system!"
+  };
+
+  // Loading state for login and register
+  const isLoginLoading = loginMutation.isPending;
+  const isRegisterLoading = registerMutation.isPending;
+
+  // If the auth state is loading or user is logged in, don't render the form
+  if (isLoading || user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-neutral flex flex-col items-center justify-center p-4 animate__animated animate__fadeIn">
+      {/* Logo and Header Section */}
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-bold text-primary mb-2">FLIP Patashala</h1>
+        <p className="text-gray-600">Your gateway to Flipped learning with AI</p>
+      </div>
+
+      {/* Main Container */}
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden max-w-4xl w-full flex flex-col md:flex-row">
+        {/* Left illustration section (hidden on mobile) */}
+        <div className="hidden md:block md:w-1/2 bg-primary p-8 flex flex-col justify-center items-center text-white">
+          <div className="text-center mb-8">
+            <GraduationCap className="h-16 w-16 mb-4 animate-pulse text-amber-300" />
+            <h2 className="text-2xl font-semibold mb-4">Welcome to FLIP Patashala</h2>
+            <p className="opacity-90">The next-generation flipped educational platform</p>
+          </div>
+          
+          <div className="rounded-lg shadow-lg max-w-xs w-full h-auto bg-gradient-to-br from-blue-600 to-purple-600 flex flex-col p-6">
+            <h3 className="text-white text-lg font-medium mb-4">Flipped Learning Benefits</h3>
+            <ul className="text-white/90 text-sm space-y-3">
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5">✓</div>
+                <div>Learn at your own pace with pre-recorded materials</div>
+              </li>
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5">✓</div>
+                <div>More interactive classroom time for discussions</div>
+              </li>
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5">✓</div>
+                <div>Personalized learning experience with AI insights</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Right form section */}
+        <div className="p-8 md:w-1/2 flex flex-col justify-center">
+          <div className="md:hidden text-center mb-6">
+            <GraduationCap className="h-12 w-12 text-amber-500 mb-2 mx-auto animate-pulse" />
+          </div>
+
+          <Tabs defaultValue="login" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="login">Login</TabsTrigger>
+              <TabsTrigger value="register">Register</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="login">
+              <h3 className="text-2xl font-semibold mb-6">Log in to your account</h3>
+              
+              {/* Test Login Buttons - Quick access */}
+              <div className="mb-6 rounded-lg border p-4 bg-gray-50">
+                <TestLoginButtons />
+              </div>
+              
+              {/* Role selector pills */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Button
+                  type="button"
+                  onClick={() => setSelectedRole("student")}
+                  variant={selectedRole === "student" ? "default" : "outline"}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <FaRegUser /> Student
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setSelectedRole("faculty")}
+                  variant={selectedRole === "faculty" ? "default" : "outline"}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <FaUserTie /> Faculty
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setSelectedRole("admin")}
+                  variant={selectedRole === "admin" ? "default" : "outline"}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <FaUserCog /> Admin
+                </Button>
+              </div>
+              
+              {/* Role-specific message */}
+              <p className="text-gray-600 mb-6">{roleMessages[selectedRole]}</p>
+
+              <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    {...loginForm.register("email")}
+                  />
+                  {loginForm.formState.errors.email && (
+                    <p className="text-sm text-red-500">{loginForm.formState.errors.email.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      {...loginForm.register("password")}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  {loginForm.formState.errors.password && (
+                    <p className="text-sm text-red-500">{loginForm.formState.errors.password.message}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="remember-me" {...loginForm.register("rememberMe")} />
+                  <Label htmlFor="remember-me" className="text-sm text-gray-600">
+                    Remember me
+                  </Label>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-blue-600"
+                  disabled={isLoginLoading}
+                >
+                  {isLoginLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
+                </Button>
+              </form>
+
+              <div className="mt-6">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => navigate("/")}
+                >
+                  Back to Home
+                </Button>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="register" className="animate__animated animate__slideInRight">
+              <h3 className="text-2xl font-semibold mb-6">Create a new account</h3>
+
+              {/* Registration status message */}
+              {registrationMessage && (
+                <Alert className={`mb-4 ${registrationSuccess ? "bg-green-50 border-green-600" : "bg-red-50 border-red-600"}`}>
+                  <div className="flex items-start gap-2">
+                    {registrationSuccess ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                    )}
+                    <AlertDescription className={registrationSuccess ? "text-green-700" : "text-red-700"}>
+                      {registrationMessage}
+                    </AlertDescription>
+                  </div>
+                </Alert>
+              )}
+              
+              {/* Role selector pills for register */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <Button
+                  type="button"
+                  onClick={() => setSelectedRole("student")}
+                  variant={selectedRole === "student" ? "default" : "outline"}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <FaRegUser /> Student
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setSelectedRole("faculty")}
+                  variant={selectedRole === "faculty" ? "default" : "outline"}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <FaUserTie /> Faculty
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setSelectedRole("admin")}
+                  variant={selectedRole === "admin" ? "default" : "outline"}
+                  className="flex items-center gap-2 rounded-full"
+                >
+                  <FaUserCog /> Admin
+                </Button>
+              </div>
+
+              <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="register-email">Email Address</Label>
+                  <Input
+                    id="register-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    {...registerForm.register("email")}
+                  />
+                  {registerForm.formState.errors.email && (
+                    <p className="text-sm text-red-500">{registerForm.formState.errors.email.message}</p>
+                  )}
+                </div>
+
+                {/* Role ID field with dynamic label and placeholder */}
+                <div className="space-y-2">
+                  <Label htmlFor="role_id">{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} ID</Label>
+                  <div className="relative">
+                    <FaIdCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <Input
+                      id="role_id"
+                      type="text"
+                      className="pl-10"
+                      placeholder={roleIdPlaceholder}
+                      {...registerForm.register("role_id")}
+                    />
+                  </div>
+                  {registerForm.formState.errors.role_id && (
+                    <p className="text-sm text-red-500">{registerForm.formState.errors.role_id.message}</p>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    {selectedRole === "student" ? "Student ID must start with 'S' (e.g., S001)" : 
+                     selectedRole === "faculty" ? "Faculty ID must start with 'F' (e.g., F001)" : 
+                     "Admin code must include 'ADMIN' (e.g., ADMIN001)"}
+                  </p>
+                </div>
+                
+                {/* Department dropdown for students and faculty */}
+                {(selectedRole === "student" || selectedRole === "faculty") && (
+                  <div className="space-y-2">
+                    <Label htmlFor="department_id">Department</Label>
+                    <div className="relative">
+                      <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
+                      <Select 
+                        onValueChange={(value) => {
+                          // Convert string to number for the department_id
+                          const numValue = parseInt(value, 10);
+                          registerForm.setValue("department_id", numValue);
+                        }}
+                      >
+                        <SelectTrigger className="pl-10">
+                          <SelectValue placeholder="Select your department" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departments?.map((dept: any) => (
+                            <SelectItem key={dept.id} value={dept.id.toString()}>
+                              {dept.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <input
+                        type="hidden"
+                        {...registerForm.register("department_id")}
+                      />
+                    </div>
+                    {registerForm.formState.errors.department_id && (
+                      <p className="text-sm text-red-500">{registerForm.formState.errors.department_id.message}</p>
+                    )}
+                    <p className="text-xs text-gray-500">
+                      Select your academic department
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="register-password">Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="register-password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      {...registerForm.register("password")}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  {registerForm.formState.errors.password && (
+                    <p className="text-sm text-red-500">{registerForm.formState.errors.password.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="register-confirm-password">Confirm Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="register-confirm-password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      {...registerForm.register("confirmPassword")}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  {registerForm.formState.errors.confirmPassword && (
+                    <p className="text-sm text-red-500">{registerForm.formState.errors.confirmPassword.message}</p>
+                  )}
+                </div>
+
+                <input
+                  type="hidden"
+                  {...registerForm.register("role")}
+                  value={selectedRole}
+                />
+
+                <div className="pt-2">
+                  <Button
+                    type="submit"
+                    className="w-full bg-primary hover:bg-blue-600"
+                    disabled={isRegisterLoading}
+                  >
+                    {isRegisterLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Registering...
+                      </>
+                    ) : (
+                      "Register"
+                    )}
+                  </Button>
+                </div>
+                
+                {/* Verification note */}
+                <div className="text-center text-sm text-gray-500 mt-4">
+                  <p>
+                    <AlertCircle className="inline h-4 w-4 mr-1" />
+                    Your account will require verification by an admin before login (1-3 days)
+                  </p>
+                </div>
+              </form>
+
+              <div className="mt-6">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => navigate("/")}
+                >
+                  Back to Home
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-8 text-center text-gray-500 text-sm">
+        <p>© 2023-2025 FLIP Patashala - Empowering Education with AI</p>
+      </div>
+    </div>
+  );
+}

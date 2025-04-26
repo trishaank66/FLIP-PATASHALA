@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLIP Patashala Access Hub</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    h1 {
+      color: #2563eb;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: #64748b;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .card h2 {
+      color: #1e40af;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 0.75rem;
+      margin-top: 0;
+    }
+    
+    .access-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .access-option {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .access-option:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      border-color: #bfdbfe;
+    }
+    
+    .access-option h3 {
+      color: #2563eb;
+      margin-top: 0;
+    }
+    
+    .port-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1e40af;
+      margin: 1rem 0;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    
+    .badge.primary {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge.secondary {
+      background-color: #f1f5f9;
+      color: #475569;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: #1d4ed8;
+    }
+    
+    .btn.secondary {
+      background: #64748b;
+    }
+    
+    .btn.secondary:hover {
+      background: #475569;
+    }
+    
+    .code {
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: monospace;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+    
+    .access-methods {
+      margin-bottom: 2rem;
+    }
+    
+    .method {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      transition: all 0.2s ease;
+    }
+    
+    .method:hover {
+      background: #f8fafc;
+      border-color: #bfdbfe;
+    }
+    
+    .method-number {
+      background: #2563eb;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+    
+    .method-content {
+      flex: 1;
+    }
+    
+    .method-title {
+      font-weight: 600;
+      color: #334155;
+    }
+    
+    .method-description {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .access-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script>
+    // Function to check if a port is accessible
+    async function checkPort(port) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        
+        const response = await fetch(`http://localhost:${port}`, {
+          method: 'HEAD',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        return response.ok;
+      } catch (e) {
+        return false;
+      }
+    }
+    
+    // Attempt to redirect to available port
+    async function tryRedirect() {
+      const ports = [3000, 5001, 3001, 5000];
+      
+      for (const port of ports) {
+        const available = await checkPort(port);
+        
+        if (available) {
+          console.log(`Port ${port} is available, redirecting...`);
+          window.location.href = `http://localhost:${port}`;
+          return;
+        }
+      }
+      
+      console.log('No available ports found');
+      
+      // Update status indicators
+      document.addEventListener('DOMContentLoaded', () => {
+        const statusElements = document.querySelectorAll('[data-status]');
+        
+        statusElements.forEach(async (element) => {
+          const port = element.getAttribute('data-port');
+          const available = await checkPort(parseInt(port));
+          
+          if (available) {
+            element.textContent = 'Available';
+            element.classList.add('primary');
+            element.classList.remove('secondary');
+          } else {
+            element.textContent = 'Not Available';
+          }
+        });
+      });
+    }
+    
+    // Try to redirect when the page loads
+    window.addEventListener('load', tryRedirect);
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>FLIP Patashala</h1>
+      <p class="subtitle">Access Hub</p>
+    </header>
+    
+    <div class="card">
+      <h2>Connect to the Application</h2>
+      
+      <div class="access-options">
+        <div class="access-option">
+          <span class="badge primary">Primary</span>
+          <h3>Direct Connection</h3>
+          <div class="port-number">3000</div>
+          <span class="badge secondary" data-status data-port="3000">Checking...</span>
+          <p>Main application interface</p>
+          <a href="http://localhost:3000" class="btn">Connect</a>
+        </div>
+        
+        <div class="access-option">
+          <span class="badge secondary">Alternative</span>
+          <h3>Fallback Connection</h3>
+          <div class="port-number">5001</div>
+          <span class="badge secondary" data-status data-port="5001">Checking...</span>
+          <p>Secondary access point</p>
+          <a href="http://localhost:5001" class="btn secondary">Connect</a>
+        </div>
+        
+        <div class="access-option">
+          <span class="badge secondary">System</span>
+          <h3>Launcher Access</h3>
+          <div class="port-number">&#x2699;</div>
+          <p>Utility scripts for access</p>
+          <a href="javascript:void(0)" onclick="alert('Run in terminal: node flip-launcher.cjs')" class="btn secondary">Details</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>Quick Access Methods</h2>
+      
+      <div class="access-methods">
+        <div class="method">
+          <div class="method-number">1</div>
+          <div class="method-content">
+            <div class="method-title">Direct URL Access</div>
+            <div class="method-description">
+              Open <a href="http://localhost:3000">http://localhost:3000</a> directly in your browser
+            </div>
+          </div>
+        </div>
+        
+        <div class="method">
+          <div class="method-number">2</div>
+          <div class="method-content">
+            <div class="method-title">Launch Script</div>
+            <div class="method-description">
+              Run <code>node flip-launcher.cjs</code> in your terminal
+            </div>
+          </div>
+        </div>
+        
+        <div class="method">
+          <div class="method-number">3</div>
+          <div class="method-content">
+            <div class="method-title">Direct Connector</div>
+            <div class="method-description">
+              Run <code>node direct-connector.cjs</code> and then open <code>connect.html</code>
+            </div>
+          </div>
+        </div>
+        
+        <div class="method">
+          <div class="method-number">4</div>
+          <div class="method-content">
+            <div class="method-title">Quick Start Script</div>
+            <div class="method-description">
+              Run <code>./start-flip.sh</code> for an automated solution
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="code">
+        <pre><code># For terminal experts
+npm run dev           # Start the application
+node flip-launcher.cjs  # Find the running port
+./start-flip.sh       # Quick start solution</code></pre>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>FLIP Patashala Access Hub | Created for easy connection to your application</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Presentation Slides</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .slide-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+        .slide {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        .slide-header {
+            background-color: #1877F2;
+            color: white;
+            padding: 15px 30px;
+        }
+        .slide-title {
+            margin: 0;
+            font-size: 28px;
+        }
+        .slide-subtitle {
+            margin: 5px 0 0;
+            font-size: 18px;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+        .slide-content {
+            padding: 30px;
+        }
+        .slide-footer {
+            background-color: #f9f9f9;
+            padding: 10px 30px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        .bullet-list {
+            padding-left: 20px;
+        }
+        .bullet-list li {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .diagram {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+        }
+        .note {
+            background-color: #f0f7ff;
+            border-left: 4px solid #1877F2;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .two-columns {
+            display: flex;
+            gap: 30px;
+        }
+        .column {
+            flex: 1;
+        }
+        @media (max-width: 700px) {
+            .two-columns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="note" style="margin-bottom: 30px;">
+            <strong>Note:</strong> This is a sample presentation. The actual slides content may not be available at the moment.
+        </div>
+        
+        <!-- Title Slide -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">Database Systems</h1>
+                <h2 class="slide-subtitle">Fundamentals and Applications</h2>
+            </div>
+            <div class="slide-content" style="text-align: center;">
+                <h2>Course Introduction</h2>
+                <p>Dr. Samanta Patel</p>
+                <p>Department of Computer Science</p>
+                <p>Spring 2025</p>
+            </div>
+            <div class="slide-footer">
+                <span>Slide 1 of 5</span>
+                <span>FLIP Patashala</span>
+            </div>
+        </div>
+        
+        <!-- Course Overview Slide -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">Course Overview</h1>
+            </div>
+            <div class="slide-content">
+                <div class="two-columns">
+                    <div class="column">
+                        <h3>Learning Objectives</h3>
+                        <ul class="bullet-list">
+                            <li>Understand database design principles</li>
+                            <li>Master SQL querying language</li>
+                            <li>Implement and optimize database systems</li>
+                            <li>Apply transaction management concepts</li>
+                            <li>Analyze performance optimization techniques</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>Course Structure</h3>
+                        <ul class="bullet-list">
+                            <li>Weekly lectures and practical sessions</li>
+                            <li>Two assignments (30%)</li>
+                            <li>Mid-term project (20%)</li>
+                            <li>Final examination (50%)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Slide 2 of 5</span>
+                <span>FLIP Patashala</span>
+            </div>
+        </div>
+        
+        <!-- Database Models Slide -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">Database Models</h1>
+            </div>
+            <div class="slide-content">
+                <h3>Major Types of Database Models</h3>
+                <ul class="bullet-list">
+                    <li><strong>Relational databases:</strong> Organize data into tables with rows and columns (e.g., MySQL, PostgreSQL)</li>
+                    <li><strong>NoSQL databases:</strong> Store data in formats other than relational tables
+                        <ul>
+                            <li>Document stores (MongoDB, CouchDB)</li>
+                            <li>Key-value stores (Redis, DynamoDB)</li>
+                            <li>Column-family stores (Cassandra, HBase)</li>
+                            <li>Graph databases (Neo4j, ArangoDB)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Object-oriented databases:</strong> Store data in the form of objects (e.g., ObjectDB)</li>
+                </ul>
+                
+                <div class="note">
+                    <strong>Key Insight:</strong> The choice of database model should align with the specific requirements of your application.
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Slide 3 of 5</span>
+                <span>FLIP Patashala</span>
+            </div>
+        </div>
+        
+        <!-- SQL Example Slide -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">SQL Fundamentals</h1>
+            </div>
+            <div class="slide-content">
+                <h3>Basic SQL Query Structure</h3>
+                <div class="code-block">
+                    SELECT column1, column2, ...<br>
+                    FROM table_name<br>
+                    WHERE condition<br>
+                    GROUP BY column_name<br>
+                    HAVING condition<br>
+                    ORDER BY column_name [ASC | DESC]<br>
+                    LIMIT count;
+                </div>
+                
+                <h3>Example: Retrieving Student Information</h3>
+                <div class="code-block">
+                    SELECT s.student_id, s.name, c.course_name, e.grade<br>
+                    FROM students s<br>
+                    JOIN enrollments e ON s.student_id = e.student_id<br>
+                    JOIN courses c ON e.course_id = c.course_id<br>
+                    WHERE c.department = 'Computer Science'<br>
+                    ORDER BY s.name ASC;
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Slide 4 of 5</span>
+                <span>FLIP Patashala</span>
+            </div>
+        </div>
+        
+        <!-- ACID Properties Slide -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">Transaction Management</h1>
+            </div>
+            <div class="slide-content">
+                <h3>ACID Properties</h3>
+                <div class="diagram">
+                    <div style="display: flex; justify-content: space-around; text-align: center;">
+                        <div style="width: 22%; padding: 15px; border: 2px solid #1877F2; border-radius: 50%;">
+                            <strong>A</strong>tomicity
+                        </div>
+                        <div style="width: 22%; padding: 15px; border: 2px solid #1877F2; border-radius: 50%;">
+                            <strong>C</strong>onsistency
+                        </div>
+                        <div style="width: 22%; padding: 15px; border: 2px solid #1877F2; border-radius: 50%;">
+                            <strong>I</strong>solation
+                        </div>
+                        <div style="width: 22%; padding: 15px; border: 2px solid #1877F2; border-radius: 50%;">
+                            <strong>D</strong>urability
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="bullet-list">
+                    <li><strong>Atomicity:</strong> Transactions are all-or-nothing operations</li>
+                    <li><strong>Consistency:</strong> Transactions maintain database integrity</li>
+                    <li><strong>Isolation:</strong> Concurrent transactions do not interfere with each other</li>
+                    <li><strong>Durability:</strong> Completed transactions persist even after system failures</li>
+                </ul>
+            </div>
+            <div class="slide-footer">
+                <span>Slide 5 of 5</span>
+                <span>FLIP Patashala</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

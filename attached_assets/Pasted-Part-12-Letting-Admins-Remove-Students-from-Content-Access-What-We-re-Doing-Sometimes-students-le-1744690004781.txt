@@ -1,0 +1,59 @@
+Part 12: Letting Admins Remove Students from Content Access
+What We’re Doing
+Sometimes students leave, so let’s let admins close their library cards, stopping them from seeing content! This is a core CM feature, ensuring only current students (like “S001”) access files. We’ll add a “Remove Student” button to the admin dashboard from Part 11, using UA’s existing student deletion to update CM’s permissions (e.g., block “CSE” files). It’s about keeping CM’s library tidy, not redoing UA’s user removal. A zooming trash icon will make it clear!
+What We Need  
+Add a “Remove Student” button to the admin dashboard, showing a student table (e.g., “S001, CSE”).  
+
+A CM-specific /remove-content-access endpoint that uses UA’s /delete-student to clear subjects_faculty in CM’s “content” access rules.  
+
+Log actions in UA’s “audit_log” table (e.g., “Admin removed S001 from content”).  
+
+A “zoomIn” animation for the button and a FontAwesome trash icon.
+Who Can Do What  
+Students:  
+Can: Watch/download files if still enrolled.  
+
+Can’t: Remove anyone or see the dashboard.  
+
+Understands: “Your files are ready if you’re here!”
+Faculty:  
+Can: Upload, edit, delete files, see analytics, use tags.  
+
+Can’t: Remove students or use admin tools.  
+
+Understands: “Your content stays safe for active students!”
+Admins:  
+Can: Sync students (Part 11), remove students to block content access.  
+
+Can’t: Delete faculty content directly—that’s for faculty.  
+
+Understands: “Remove students to keep the library current!”
+Tools Needed  
+Frontend: React.js (Next.js) for the dashboard, TailwindCSS for styling, Animate.css for “zoomIn” effect, FontAwesome for a trash icon (fa-trash).  
+
+Backend: FastAPI for /remove-content-access, SQLite to update access.  
+
+Database: SQLite for CM’s “content” table, uses UA’s “users” and “audit_log”.  
+
+Storage: None—just updating permissions.  
+
+AI Tools: None—just access control.  
+
+Tech Stack Rule: Use only these tools. Any changes need my approval first.
+Strict Mandate for Replit AI
+Dear Replit AI, you must always use real, fully functional implementations for all tools, technologies, frameworks, and APIs, including AI, ML, DL, DS, CV, and others. Simulated, mocked, fake, placeholder, hardcoded, or dummy responses are strictly forbidden. All computations, data processing, and API calls must be genuine, executed in real-time with actual systems, producing verifiable results. This rule is absolute and enforced for every operation, with no exceptions.
+Think Step by Step  
+Design the student table and “Remove Student” button on the dashboard.  
+
+Plan the /remove-content-access endpoint to use UA’s /delete-student for CM permissions.  
+
+Ensure “audit_log” tracks removals for transparency.  
+
+Choose “zoomIn” animation and trash icon for a bold UX.  
+
+Ensure high-end CSS, alignment, colors, icons, and spacing—delightful for all users, even kids.
+UX Mandate
+All pages must have proper styling, alignment, structure, high-end animations (used sparingly, only where needed), good colors, and FontAwesome icons. The UX should delight users, and even a child should understand it.
+Why It’s Cool
+The zooming button keeps the library neat, ensuring only the right students see content, making Flipped Patashala secure and organized!
+

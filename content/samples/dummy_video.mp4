@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Video Lecture</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    
+    .video-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .video-header {
+      background-color: #1877F2;
+      color: white;
+      padding: 15px 20px;
+    }
+    
+    .video-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    
+    .video-content {
+      padding: 20px;
+    }
+    
+    .video-player {
+      background-color: #000;
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+    }
+    
+    .video-player img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .play-button::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 30px solid white;
+      margin-left: 8px;
+    }
+    
+    .video-info {
+      margin-top: 20px;
+    }
+    
+    .video-description {
+      line-height: 1.6;
+    }
+    
+    .video-controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #f0f0f0;
+      border-top: 1px solid #ddd;
+    }
+    
+    .control-button {
+      background-color: #1877F2;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .timestamp-list {
+      margin-top: 20px;
+    }
+    
+    .timestamp {
+      display: flex;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .timestamp-time {
+      width: 60px;
+      color: #1877F2;
+      font-weight: bold;
+    }
+    
+    .comment {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      border-left: 4px solid #1877F2;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <div class="video-header">
+      <h1>Machine Learning Basics: Neural Networks</h1>
+    </div>
+    
+    <div class="video-player">
+      <!-- Using a placeholder image since we can't embed actual video -->
+      <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgZmlsbD0iIzFiMWIxYiIvPgogIDx0ZXh0IHg9IjQwMCIgeT0iMjI1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5TYW1wbGUgVmlkZW8gUGxheWVyOiBNYWNoaW5lIExlYXJuaW5nIEJhc2ljczwvdGV4dD4KICA8dGV4dCB4PSI0MDAiIHk9IjI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYWFhIj4oVGhpcyBpcyBhIHNhbXBsZSBIVE1MIGZhbGxiYWNrIGZvciB2aWRlbyBjb250ZW50KTwvdGV4dD4KPC9zdmc+" alt="Neural Networks Video Thumbnail">
+      <div class="play-button"></div>
+    </div>
+    
+    <div class="video-content">
+      <div class="video-info">
+        <h2>Introduction to Neural Networks</h2>
+        <p class="video-description">
+          This lecture covers the fundamentals of neural networks, including perceptrons, activation functions, backpropagation, and practical applications. The video provides both theoretical foundations and code examples to help you understand how neural networks work.
+        </p>
+      </div>
+      
+      <div class="timestamp-list">
+        <h3>Video Timestamps:</h3>
+        <div class="timestamp">
+          <div class="timestamp-time">00:00</div>
+          <div class="timestamp-description">Introduction and overview</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">03:45</div>
+          <div class="timestamp-description">What is a neural network?</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">07:22</div>
+          <div class="timestamp-description">Single-layer perceptrons</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">12:51</div>
+          <div class="timestamp-description">Activation functions</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">18:30</div>
+          <div class="timestamp-description">Multilayer networks</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">25:04</div>
+          <div class="timestamp-description">Backpropagation algorithm</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">33:17</div>
+          <div class="timestamp-description">Training and optimization</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">41:22</div>
+          <div class="timestamp-description">Code example walkthrough</div>
+        </div>
+        <div class="timestamp">
+          <div class="timestamp-time">49:15</div>
+          <div class="timestamp-description">Common challenges and solutions</div>
+        </div>
+      </div>
+      
+      <div class="comment">
+        <h3>Faculty Note:</h3>
+        <p>Pay special attention to the backpropagation section as this is a challenging concept for many students. The code examples starting at 41:22 will be particularly helpful for your assignment.</p>
+      </div>
+    </div>
+    
+    <div class="video-controls">
+      <button class="control-button">Previous Lecture</button>
+      <button class="control-button">Download Slides</button>
+      <button class="control-button">Next Lecture</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+Dummy Data for Testing
+Right After Planning
+Here’s realistic test data with Indian names for the UA Module, matching the original prompt:
+Users Table (150 students, 10 faculty, 2 admins):  
+Students:  
+ID: S001, Email: priya.sharma@activelearn.com, Password: (hashed), Role: student, Dept_ID: 1 (CSE), Verification_Pending: false, Status: active  
+
+ID: S002, Email: arjun.mehta@activelearn.com, Role: student, Dept_ID: 2 (IT), Verification_Pending: false, Status: active  
+
+ID: S003, Email: neha.verma@activelearn.com, Role: student, Dept_ID: 3 (ECE), Verification_Pending: false, Status: active  
+
+... (147 more, like Rahul, Anjali, Vikram)
+Faculty:  
+ID: F001, Email: prof.rao@activelearn.com, Role: faculty, Dept_ID: 1 (CSE), Verification_Pending: false, Status: active  
+
+ID: F002, Email: dr.meena@activelearn.com, Role: faculty, Dept_ID: 2 (IT), Verification_Pending: false, Status: active  
+
+... (8 more, like Prof. Gupta, Dr. Singh)
+Admins:  
+ID: A001, Email: admin.kumar@activelearn.com, Role: admin, Dept_ID: null, Verification_Pending: false, Status: active  
+
+ID: A002, Email: admin.lal@activelearn.com, Role: admin, Dept_ID: null, Verification_Pending: false, Status: active
+Departments Table:  
+ID: 1, Name: CSE  
+
+ID: 2, Name: IT  
+
+ID: 3, Name: ECE  
+
+ID: 4, Name: MECH  
+
+ID: 5, Name: CIVIL
+CSV File (students.csv):  
+ID,Email,Role,Department
+S001,priya.sharma@activelearn.com,student,CSE
+S002,arjun.mehta@activelearn.com,student,IT
+S003,neha.verma@activelearn.com,student,ECE
+... (147 more rows for 150 students)
+Audit Log Table (Sample):  
+ID: 1, Action: “Admin added Prof. Rao”, User_ID: A001  
+
+ID: 2, Action: “Admin removed S002”, User_ID: A001
+How to Use It: Test registration, verification, login, syncing students, managing faculty, adjusting groups, and viewing insights (e.g., “CSE is growing—add students!”).
+Verification of Features
+All features from the original prompt are included:  
+Separate Login/Register Pages: Parts 1, 2 (with Back to Home fix).  
+
+Role-Specific Verification: Parts 3–5 (students via CSV, faculty via admin, admins via code).  
+
+Enrollment Sync: Part 7 (CSV import).  
+
+Manual Controls: Parts 8, 10 (add students, faculty).  
+
+Deletions: Parts 9, 11, 13, 14 (students, faculty, groups, self).  
+
+Security: Across parts (bcrypt hashing, PyJWT sessions, audit logs, rate limiting implied in backend).  
+
+AI Insights: Part 15 (scikit-learn for groups, Pandas for inactivity, Claude API for suggestions).  
+
+Back to Home Fix: Parts 1, 2 (buttons redirect to /home).  
+
+Integration: All parts feed user data (role, dept_id) to Home Page, stubbed for CM, IL, etc.  
+
+UI/UX: High-end animations (fadeIn, pulse, etc.) and FontAwesome icons in every part.
+Removed: MFA, OTP, Twilio API, as requested.
+Enhanced: Paid Claude API key for real insights, simplified verification, and layman-friendly AI tips.
+Notes for Lovable AI
+No Coding Yet: This is a planning blueprint—don’t build anything now!  
+
+UA Module Only: Focus on authentication—no content management or other features beyond stubs.  
+
+Must Look Amazing: Use Animate.css for animations and FontAwesome for icons—make it visually stunning!  
+
+Real Tools: Run actual scikit-learn, Pandas, and Claude API (paid key)—no mocks or fake results.  
+
+Simple Insights: AI tips must be clear, like “Add more CSE students!”—no tech jargon, real value for admins.  
+
+Dissertation Context: This is for my M.Tech dissertation at BITS Pilani, called Active Learn.  
+
+Future Prep: Stubs for holographic feedback and adaptive learning, but no details.
+

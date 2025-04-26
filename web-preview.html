@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=http://localhost:3000">
+  <title>FLIP Patashala</title>
+  <script>
+    window.addEventListener('load', function() {
+      window.location.href = 'http://localhost:3000';
+    });
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 3rem;
+      line-height: 1.5;
+    }
+    h1 { color: #2563eb; }
+    .btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+    .loading {
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(0,0,0,.1);
+      border-radius: 50%;
+      border-top-color: #2563eb;
+      animation: spin 1s ease infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>FLIP Patashala</h1>
+  <div class="loading"></div>
+  <p>Redirecting to port 3000...</p>
+  <p>If you're not redirected automatically, click below:</p>
+  <a href="http://localhost:3000" class="btn">Go to Application</a>
+  
+  <div style="margin-top: 40px; font-size: 0.9rem; color: #666;">
+    <p>Having trouble? Try one of these options:</p>
+    <p>
+      <a href="http://localhost:3000">Port 3000</a> | 
+      <a href="http://localhost:5000">Port 5000</a> | 
+      <a href="http://localhost:5001">Port 5001</a> | 
+      <a href="http://localhost:3001">Port 3001</a>
+    </p>
+  </div>
+</body>
+</html>

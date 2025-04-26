@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Video Content</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #1877F2;
+            border-bottom: 2px solid #1877F2;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #000;
+            border-radius: 8px;
+        }
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            background-color: #333;
+        }
+        .play-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: #1877F2;
+        }
+        .message {
+            background-color: #f0f7ff;
+            border-left: 4px solid #1877F2;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .video-info {
+            margin-top: 20px;
+            text-align: left;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        .video-info h3 {
+            margin-top: 0;
+            color: #1877F2;
+        }
+        .video-info ul {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Introduction to Machine Learning</h1>
+        
+        <div class="message">
+            <strong>Note:</strong> The video content is currently unavailable. This is a sample placeholder.
+        </div>
+        
+        <div class="video-container">
+            <div class="video-placeholder">
+                <div class="play-icon">▶</div>
+                <h2>Video Content Unavailable</h2>
+                <p>The requested video could not be loaded</p>
+            </div>
+        </div>
+        
+        <div class="video-info">
+            <h3>Video Information</h3>
+            <ul>
+                <li><strong>Title:</strong> Introduction to Machine Learning</li>
+                <li><strong>Duration:</strong> 45:20</li>
+                <li><strong>Lecturer:</strong> Prof. R. Kumar</li>
+                <li><strong>Topics Covered:</strong> Supervised Learning, Unsupervised Learning, Reinforcement Learning, Neural Networks</li>
+            </ul>
+        </div>
+        
+        <div class="video-info">
+            <h3>Video Description</h3>
+            <p>
+                This introductory lecture covers the fundamental concepts of machine learning, including different learning paradigms, 
+                basic algorithms, and practical applications in various fields. Students will learn about the historical development 
+                of machine learning and gain insights into current trends and future directions.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
